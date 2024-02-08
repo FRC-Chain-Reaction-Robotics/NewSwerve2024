@@ -19,7 +19,6 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 
 
@@ -36,7 +35,6 @@ public class RobotContainer {
 
   private Winch m_winch = new Winch();
   private Shooter m_shooter = new Shooter();
-  private Arm m_arm = new Arm();
   private Intake m_intake = new Intake();
 
   
