@@ -1,19 +1,67 @@
 package frc.robot.subsystems;
 
+
 /* Github testing */
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 
 public class Apriltags extends SubsystemBase{
+   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+   NetworkTableEntry tx = table.getEntry("tx");
+   NetworkTableEntry ty = table.getEntry("ty");
+   NetworkTableEntry ta = table.getEntry("ta");
 
-    private static final boolean m_LimeLightValidTarget = false;
-    private static final double m_LimeLightDriveCommand = 0.0;
-    private static final double m_LimeLightSteerCommand = 0.0;
 
-    public Apriltags() {
+   private double x;
+   private double y;
+   private double area;
+  
+   public Apriltags() {
+       x = tx.getDouble(0.0);
+       y = ty.getDouble(0.0);
+       area = ta.getDouble(0.0);
+   }
+  
+   //post to smart dashboard periodically
+   public void postToSmartDashbooard(){
+       SmartDashboard.putNumber("LimelightX", x);
+       SmartDashboard.putNumber("LimelightY", y);
+       SmartDashboard.putNumber("LimelightArea", area);
+   }
 
-    }
-    
 
-} 
+   //read values periodically
+   public void updateLimelightValues(){
+       SmartDashboard.putNumber("LimelightX", x);
+       SmartDashboard.putNumber("LimelightY", y);
+       SmartDashboard.putNumber("LimelightArea", area);
+   }
+
+
+   public double getX(){
+       return x;
+   }
+
+
+   public double getY(){
+       return y;
+   }
+
+
+   public double getArea(){
+       return area;
+   }
+
+
+}
+
+
+
+
+
