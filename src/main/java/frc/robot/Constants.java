@@ -220,7 +220,9 @@ public class Constants {
         public static final int kRightShooterMotorID = 4;
         public static final int kLeftShooterMotorID = 2;
 
-        public static final double kShooterSpeed = .6;
+        public static final int launchSpeedLimit = 60;
+        public static final int feedSpeedLimit = 60;
+
 
 
       }
