@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /* Github testing */
 public class Intake extends SubsystemBase{
 
-    CANSparkMax intakeCANSparkMax;
+    private CANSparkMax intakeCANSparkMax;
 
     public Intake(){
         intakeCANSparkMax.setInverted(true);
@@ -27,7 +27,5 @@ public class Intake extends SubsystemBase{
         intakeCANSparkMax.setInverted(true);
         intakeCANSparkMax.set(speed);
     }
-    
-    
     
 }
