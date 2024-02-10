@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ShootMech;
 import frc.robot.commands.auto.DriveToDistance;
+import frc.robot.commands.auto.ShootAndMove;
 import frc.robot.commands.auto.TurnToAngle;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -79,7 +80,10 @@ public class RobotContainer {
     m_winch.setDefaultCommand(new RunCommand(() -> m_winch.winchExtend(m_operatorController)));
     
     //onTrue() can be changed to whileTrue() if we were to hold the button to shoot
-    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_shooter.cherryBomb()));
+    m_operatorController.a().onTrue(new ShootMech(m_shooter));
+    
+
+
     
     //slow mode for right bumper, medium slow for left bumper
     m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
@@ -92,6 +96,8 @@ public class RobotContainer {
   {
     chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(12), m_swerve));
     chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
+    chooser.addOption("Shoot and Move", new ShootAndMove());
+    chooser.addOption("Shoot", new ShootMech(m_shooter));
 
     SmartDashboard.putData(chooser);
   }

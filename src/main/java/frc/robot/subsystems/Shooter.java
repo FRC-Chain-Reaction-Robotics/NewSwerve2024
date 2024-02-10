@@ -34,6 +34,7 @@ public class Shooter extends SubsystemBase{
    private double tolerance = 0.1;
    private double targetArea;
    private boolean onTarget = false;
+   public boolean shoot = false;
    private double areaTolerance = .01;
    
 
@@ -71,15 +72,18 @@ public class Shooter extends SubsystemBase{
 
    public void cherryBomb() {
    //TODO: Add the launch speed
+    shoot = false;
     final boolean withinXTolerance = (m_Apriltags.getX()<tolerance&&m_Apriltags.getX()>-tolerance);
     final boolean withinYTolerance = (m_Apriltags.getY()<tolerance&&m_Apriltags.getY()>-tolerance);
     final boolean withinAreaTolerance = (m_Apriltags.getArea()-targetArea<areaTolerance&&m_Apriltags.getArea()-targetArea>-areaTolerance);
    shooterCANSparkMax.set(launchSpeedLimit);
+
    if(shooterCANSparkMax.getEncoder().getVelocity()<0.6||!onTarget){
        onTarget = withinXTolerance||withinYTolerance||withinAreaTolerance;
    }
    else {
         m_PneumaticsSubsystem.toggle();
+        shoot = true;
    }
    if(!withinXTolerance){
         mSwerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change */), false);

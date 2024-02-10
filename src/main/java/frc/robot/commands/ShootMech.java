@@ -14,4 +14,10 @@ public class ShootMech extends Command{
     public void execute() {
         m_shooter.cherryBomb();
     }
+
+    public boolean interrupted() {
+        return m_shooter.shoot;
+    }
+
+    
 } 
