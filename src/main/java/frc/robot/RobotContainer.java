@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ShootMech;
 import frc.robot.commands.auto.DriveToDistance;
 import frc.robot.commands.auto.TurnToAngle;
 import frc.robot.commands.drive.DriveWithJoysticks;
@@ -34,7 +35,7 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
 
   private Winch m_winch = new Winch();
-  private Shooter m_shooter = new Shooter();
+  private Shooter m_shooter = new Shooter(m_swerve);
   private Intake m_intake = new Intake();
 
   
@@ -43,6 +44,7 @@ public class RobotContainer {
     configureButtonBindings();
     //Creating a dropdown for autonomous commands to choose from
     addCommandDropdown();
+    m_shooter.setDefaultCommand(new ShootMech(m_shooter));
     
   }
 
@@ -101,6 +103,10 @@ public class RobotContainer {
   public void disabledInit()
   {}
 
+  public void setShooterCommand()
+  {
+    m_shooter.setDefaultCommand(new ShootMech(m_shooter));
+  }
   public void enabledInit()
   { }
 

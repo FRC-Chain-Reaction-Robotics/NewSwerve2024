@@ -14,15 +14,16 @@ public class Winch extends SubsystemBase {
     CANSparkMax winchCanSparkMaxTwo;
 
     public Winch(){
-     winchCanSparkMax = new CANSparkMax(0, MotorType.kBrushless);
+     winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
      winchCanSparkMax.setInverted(false);
      winchCanSparkMax.setSmartCurrentLimit(60);
      winchCanSparkMax.setIdleMode(IdleMode.kBrake);
 
-     winchCanSparkMaxTwo = new CANSparkMax(0, MotorType.kBrushless);
+     winchCanSparkMaxTwo = new CANSparkMax(Constants.Winches.kRightWinchMotorID, MotorType.kBrushless);
      winchCanSparkMaxTwo.setInverted(false);
      winchCanSparkMaxTwo.setSmartCurrentLimit(60);
      winchCanSparkMaxTwo.setIdleMode(IdleMode.kBrake);
+     winchCanSparkMaxTwo.follow(winchCanSparkMax);
      
     }
     

@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
 
+import org.opencv.dnn.SegmentationModel;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -15,44 +17,81 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 public class Shooter extends SubsystemBase{
 
 
-   CANSparkMax shooterCanSparkMax;
-   CANSparkMax shooterCanSparkMaxTwo;
+   CANSparkMax shooterCANSparkMax;
+   CANSparkMax shooterCANSparkMaxTwo;
+   
+   CANSparkMax shooterCANSparkMaxThree;
+   CANSparkMax shooterCANSparkMaxFour;
    //TODO: update the launch speed
    private static final int launchSpeedLimit = 60;
    private static final int feedSpeedLimit = 60;
    private Apriltags m_Apriltags = new Apriltags();
    private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
+   private PIDController m_XPidController = new PIDController(.6, 0, 0);
+   private PIDController m_YPidController = new PIDController(.6, 0, 0);
+   private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
+   private Swerve mSwerve;
    private double tolerance = 0.1;
    private double targetArea;
    private boolean onTarget = false;
+   private double areaTolerance = .01;
+   
 
 
-   public Shooter() {
+   public Shooter(Swerve mSwerve) {
   
-   shooterCanSparkMax.setInverted(true);
-   shooterCanSparkMax.setSmartCurrentLimit(launchSpeedLimit);
-   shooterCanSparkMax.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+   this.mSwerve = mSwerve;
 
+   shooterCANSparkMax.setInverted(true);
+   shooterCANSparkMax.setSmartCurrentLimit(40);
+   shooterCANSparkMax.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
-   shooterCanSparkMaxTwo.setInverted(true);
-   shooterCanSparkMaxTwo.setSmartCurrentLimit(launchSpeedLimit);
-   shooterCanSparkMaxTwo.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+   shooterCANSparkMaxTwo.setInverted(false);
+   shooterCANSparkMaxTwo.setSmartCurrentLimit(40);
+   shooterCANSparkMaxTwo.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+
+   shooterCANSparkMaxThree.setInverted(true);
+   shooterCANSparkMaxThree.setSmartCurrentLimit(40);
+   shooterCANSparkMaxThree.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+
+   shooterCANSparkMaxThree.setInverted(false);
+   shooterCANSparkMaxThree.setSmartCurrentLimit(40);
+   shooterCANSparkMaxThree.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+
+    //following
+   shooterCANSparkMaxTwo.follow(shooterCANSparkMax);
+   shooterCANSparkMaxFour.follow(shooterCANSparkMaxThree);
+
+   //tolerance
+   m_XPidController.setTolerance(tolerance);
+   m_YPidController.setTolerance(tolerance);
+   m_AreaPidController.setTolerance(areaTolerance);
    }
 
 
    public void cherryBomb() {
    //TODO: Add the launch speed
-   shooterCanSparkMax.set(launchSpeedLimit);
-   while(shooterCanSparkMax.getEncoder().getVelocity()<0.6||!onTarget){
-       onTarget = (m_Apriltags.getX()>tolerance||m_Apriltags.getX()<-tolerance)||(m_Apriltags.getArea()-targetArea>tolerance||m_Apriltags.getArea()-targetArea<-tolerance);
-      
+    final boolean withinXTolerance = (m_Apriltags.getX()<tolerance&&m_Apriltags.getX()>-tolerance);
+    final boolean withinYTolerance = (m_Apriltags.getY()<tolerance&&m_Apriltags.getY()>-tolerance);
+    final boolean withinAreaTolerance = (m_Apriltags.getArea()-targetArea<areaTolerance&&m_Apriltags.getArea()-targetArea>-areaTolerance);
+   shooterCANSparkMax.set(launchSpeedLimit);
+   if(shooterCANSparkMax.getEncoder().getVelocity()<0.6||!onTarget){
+       onTarget = withinXTolerance||withinYTolerance||withinAreaTolerance;
    }
+   else {
+        m_PneumaticsSubsystem.toggle();
    }
-
-
-   public void changeAngle() {
-      
-   }  
+   if(!withinXTolerance){
+        mSwerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change */), false);
+   }
+   if(!withinYTolerance){
+        shooterCANSparkMaxThree.set(m_YPidController.calculate(m_Apriltags.getY(), 0));
+   }
+   if(!withinAreaTolerance){
+    mSwerve.drive(m_AreaPidController.calculate(m_Apriltags.getArea(), /* TODO: Change the setpoint */.5), 0, 0, false);
+   }
+   
+   }
   
 }
 
