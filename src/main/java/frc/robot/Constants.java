@@ -11,12 +11,15 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.Apriltags;
+import frc.robot.subsystems.PneumaticsSubsystem;
 
 
 /** Add your docs here. */
@@ -222,6 +225,18 @@ public class Constants {
 
         public static final int launchSpeedLimit = 60;
         public static final int feedSpeedLimit = 60;
+
+        private Apriltags m_Apriltags = new Apriltags();
+        private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
+        private PIDController m_XPidController = new PIDController(.6, 0, 0);
+        private PIDController m_YPidController = new PIDController(.6, 0, 0);
+        private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
+        private Swerve mSwerve;
+        private double tolerance = 0.1;
+        private boolean onTarget = false;
+        public boolean shoot = false;
+        private double areaTolerance = .01;
+        private double targetArea = 0.5;//calibrate this
 
 
 

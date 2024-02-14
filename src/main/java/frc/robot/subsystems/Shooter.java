@@ -23,8 +23,7 @@ public class Shooter extends SubsystemBase{
    CANSparkMax shooterCANSparkMaxThree;
    CANSparkMax shooterCANSparkMaxFour;
    //TODO: update the launch speed
-   private static final int launchSpeedLimit = 60;
-   private static final int feedSpeedLimit = 60;
+
    private Apriltags m_Apriltags = new Apriltags();
    private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
    private PIDController m_XPidController = new PIDController(.6, 0, 0);
@@ -76,7 +75,7 @@ public class Shooter extends SubsystemBase{
           boolean withinXTolerance = (m_Apriltags.getX()<tolerance&&m_Apriltags.getX()>-tolerance);
           boolean withinYTolerance = (m_Apriltags.getY()<tolerance&&m_Apriltags.getY()>-tolerance);
           boolean withinAreaTolerance = (m_Apriltags.getArea()-targetArea<areaTolerance&&m_Apriltags.getArea()-targetArea>-areaTolerance);
-          shooterCANSparkMax.set(launchSpeedLimit);
+          shooterCANSparkMax.set(Constants.Shooter.launchSpeedLimit);
           if(shooterCANSparkMax.getEncoder().getVelocity()<0.6||!onTarget){
                onTarget = withinXTolerance||withinYTolerance||withinAreaTolerance;
           }

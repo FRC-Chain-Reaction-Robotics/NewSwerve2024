@@ -5,14 +5,16 @@
 
 package frc.robot.lib;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
+
+import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -32,13 +34,13 @@ public class SwerveModule {
 
   private final RelativeEncoder m_drivingEncoder; ////encoder for driving
   private final RelativeEncoder m_turningEncoder; ////encoder for turning
-  private final CANCoder m_canCoder; ////another turning encoder for the absolute position, ID on phoenix tuner
+  private final CANcoder m_canCoder; ////another turning encoder for the absolute position, ID on phoenix tuner
 
   ////PID means Proportional Integral Derivative; uses an equation; accounts for "close enough"
   ////formula is u(t) = kP(e(t)) + kI(integral 0 to t of (e(t)dt)) + kD(d(e(t))/dt), 
   ////tuning integral constant NOT recommended
-  private final SparkMaxPIDController m_drivingPIDController; ////PID for driving
-  private final SparkMaxPIDController m_turningPIDController; ////PID for turning
+  private final SparkPIDController m_drivingPIDController; ////PID for driving
+  private final SparkPIDController m_turningPIDController; ////PID for turning
 
   private double m_chassisAngularOffset = 0; ////allows individual wheels to offset correctly
 
@@ -47,11 +49,11 @@ public class SwerveModule {
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
   
   ////allows you to apply settings you made to the cancoder
-  private CANCoderConfiguration config = new CANCoderConfiguration();
+  private CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
   
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
-   * encoder, and PID controller. This configuration is specific to the REV
+   * encoder, and PID controller. This configuration is specific to the REV  
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    * @param drivingCANId the ID for the drive controller
@@ -60,10 +62,13 @@ public class SwerveModule {
    * @param chassisAngularOffset the offset to make the wheels face forward
    */
   public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
-    config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
+    
+    cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    
+    //config.MagnetSensor = withAbsoluteSensorRange.Unsigned_0_to_360;
 
     ////boots the wheel to its current position rather than zero
-    config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+   //config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
     
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
@@ -80,7 +85,7 @@ public class SwerveModule {
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = m_turningSparkMax.getEncoder();
-    m_canCoder = new CANCoder(canCoderCANId);
+    m_canCoder = new CANcoder(canCoderCANId);
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
@@ -141,9 +146,9 @@ public class SwerveModule {
 
     // CANcoder angle is measured in degrees so we need to convert that into radians
     m_chassisAngularOffset = chassisAngularOffset; 
-    m_desiredState.angle = Rotation2d.fromDegrees(m_canCoder.getAbsolutePosition());
+    m_desiredState.angle = Rotation2d.fromDegrees(m_canCoder.getAbsolutePosition().getValue());
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition()));
+    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition().getValue()));
     
   }
 
@@ -212,7 +217,7 @@ public class SwerveModule {
   }
 
   public double getSteeringAbsolutePosition(){
-    return m_canCoder.getAbsolutePosition();
+    return m_canCoder.getAbsolutePosition().getValue();
   }
 
   public double getDrivingRelativePosition(){
