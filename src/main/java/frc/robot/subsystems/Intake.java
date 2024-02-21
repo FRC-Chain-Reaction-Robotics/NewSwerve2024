@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase{
 
     public Intake(){
 
-        intakeCANSparkMax = new CANSparkMax(21, MotorType.kBrushless); 
+        intakeCANSparkMax = new CANSparkMax(Constants.Intake.kIntakeMotorId, MotorType.kBrushless); 
         intakeCANSparkMax.setInverted(true);
         intakeCANSparkMax.setSmartCurrentLimit(60);
         intakeCANSparkMax.setIdleMode(IdleMode.kBrake);
@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase{
     }
     public void reverse(double speed){
         intakeCANSparkMax.setInverted(true);
-        intakeCANSparkMax.set(speed);
+        intakeCANSparkMax.set(speed * 2);
     }
     
 }

@@ -69,7 +69,7 @@ public class Swerve extends SubsystemBase {
   private final Field2d m_fieldSim = new Field2d();
   
   //TODO: This is where you decrease the Default Speed
-  public static final double output = 1;
+  public static final double output = .8;
 
   public static double m_output = output;
 

@@ -7,6 +7,7 @@ package frc.robot;
 
 import java.io.IOException;
 
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Apriltags;
 import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.lib.SwerveModule;
 
 
 /** Add your docs here. */
@@ -39,7 +41,7 @@ public class Constants {
         public static final double kDeadband = 0.1; 
     }
     
-    public static final class Arm {
+   /*  public static final class Arm {
         //TODO: Change the arm length
         public static final double kArmlength = Units.inchesToMeters(28.25);
         public static final double kArmlengthExtended = Units.inchesToMeters(40);
@@ -63,17 +65,17 @@ public class Constants {
         public static final double kTopAngle = .4;
 
         //TODO: Update this MotorID to match the arm
-        public static final int kRightMotorId = 9;
-        public static final int kExtensionMotorId = 11;
+        public static final int kRightMotorId = 13;
+        public static final int kExtensionMotorId = 14;
         public static final double armEncoderOffset = .225;
-    }
+    } */
 
     /* Winches should basically be activated when the driver presses one button and the robot automatically pulls itself up */
     public static final class Winches {
     
     //TODO: Update the motorID with the correct ones in the winches
      public static final int kRightWinchMotorID = 10;
-    public static final int kLeftWinchMotorID = 9;
+     public static final int kLeftWinchMotorID = 11;
     
     //TODO: The inches is just a placeholder, need to measure how much it should realistically extend after robot is built
     public static final double kWinchLength = Units.inchesToMeters(30);
@@ -127,25 +129,25 @@ public class Constants {
         public static final int kFrontLeftDrivingCanId = 1;
         public static final int kFrontLeftTurningCanId = 2;
         public static final int kFrontLeftCanCoderId = 61;
-        public static final double kFrontLeftChassisAngularOffset = Math.toRadians(0);   //   epic
+        public static final double kFrontLeftChassisAngularOffset = 0;   //   epic
         
         //Front Right Module
         public static final int kFrontRightDrivingCanId = 3; 
         public static final int kFrontRightTurningCanId = 4;
         public static final int kFrontRightCanCoderId = 62;
-        public static final double kFrontRightChassisAngularOffset = Math.toRadians(0);
+        public static final double kFrontRightChassisAngularOffset = -2*Math.PI*0.369;
         
          //Back Left Module
         public static final int kBackLeftDrivingCanId = 7;
         public static final int kBackLeftTurningCanId = 8;
         public static final int kBackLeftCanCoderId = 60;
-        public static final double kBackLeftChassisAngularOffset = Math.toRadians(0); // manually zeroed
+        public static final double kBackLeftChassisAngularOffset = 0;
         
         //Back Right Module
         public static final int kBackRightDrivingCanId = 5;
         public static final int kBackRightTurningCanId = 6;
         public static final int kBackRightCanCoderId = 59;
-        public static final double kBackRightChassisAngularOffset = Math.toRadians(0);
+        public static final double kBackRightChassisAngularOffset = 0;
 
         public static final boolean kGyroReversed = false;
       }
@@ -212,9 +214,9 @@ public class Constants {
       public static final class Intake {
 
         //TODO: Match the correct Motor ID and intakeSpeed
-        public static final int kIntakeMotorId = 12;
+        public static final int kIntakeMotorId = 9;
 
-        public static final double kIntakeSpeed = .6;
+        public static final double kIntakeSpeed = .1;
       }
 
       public static final class Shooter {

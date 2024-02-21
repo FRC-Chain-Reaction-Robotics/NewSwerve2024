@@ -5,15 +5,17 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class Winch extends SubsystemBase {
 
-    CANSparkMax winchCanSparkMax;
+     CANSparkMax winchCanSparkMax;
     CANSparkMax winchCanSparkMaxTwo;
 
-    public Winch(){
+     public Winch(){
      winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
      winchCanSparkMax.setInverted(false);
      winchCanSparkMax.setSmartCurrentLimit(60);
@@ -54,7 +56,7 @@ public class Winch extends SubsystemBase {
         }
 
         return 0.0;
-    }
+    }  
 
     
 

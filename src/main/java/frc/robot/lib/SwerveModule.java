@@ -15,12 +15,15 @@ import com.revrobotics.SparkPIDController;
 
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.proto.System;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.Main;
 
 ////indicates intentional annotations made by the Chain Reaction Robotics team
 //indicates code
@@ -62,8 +65,14 @@ public class SwerveModule {
    * @param chassisAngularOffset the offset to make the wheels face forward
    */
   public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
-    
+    m_canCoder = new CANcoder(canCoderCANId);
     cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    //cc_cfg.MagnetSensor.MagnetOffset = chassisAngularOffset;
+    m_canCoder.getConfigurator().apply(cc_cfg);
+
+  
+
     
     //config.MagnetSensor = withAbsoluteSensorRange.Unsigned_0_to_360;
 
@@ -85,7 +94,6 @@ public class SwerveModule {
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = m_turningSparkMax.getEncoder();
-    m_canCoder = new CANcoder(canCoderCANId);
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
@@ -146,9 +154,9 @@ public class SwerveModule {
 
     // CANcoder angle is measured in degrees so we need to convert that into radians
     m_chassisAngularOffset = chassisAngularOffset; 
-    m_desiredState.angle = Rotation2d.fromDegrees(m_canCoder.getAbsolutePosition().getValue());
+    m_desiredState.angle = Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition().getValue()));
+    m_turningEncoder.setPosition(Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue()).getRadians());
     
   }
 

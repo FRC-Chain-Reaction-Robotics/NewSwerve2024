@@ -19,6 +19,7 @@ import frc.robot.commands.auto.MoveandAmp;
 import frc.robot.commands.auto.TurnToAngle;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.Swerve; 
 import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Shooter;
@@ -28,17 +29,18 @@ import frc.robot.subsystems.Intake;
 public class RobotContainer{
 
   private final SendableChooser<Command> chooser = new SendableChooser<Command>();
-  private Swerve m_swerve = new Swerve();
 
-  // Subsystem creation
+   // Subsystem creation
+  private Swerve m_swerve = new Swerve();
+  private Winch m_winch = new Winch();
+  private Shooter m_shooter = new Shooter(m_swerve);
+  private Intake m_intake = new Intake();
   private final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
+
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
   private final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
 
-  private Winch m_winch = new Winch();
-  private Shooter m_shooter = new Shooter(m_swerve);
-  private Intake m_intake = new Intake();
 
   
   public RobotContainer() {
@@ -47,7 +49,7 @@ public class RobotContainer{
     //Creating a dropdown for autonomous commands to choose from
     addCommandDropdown();
     m_shooter.setDefaultCommand(new ShootMech(m_shooter));
-    
+
   }
 
   private void setupDrive() {
@@ -77,12 +79,21 @@ public class RobotContainer{
     // m_operatorController.a().onTrue(new MoveToGoal(m_arm, Row.BOTTOM))
     // .or(m_operatorController.b().onTrue(new MoveToGoal(m_arm, Row.MIDDLE)))
     // .or(m_operatorController.y().onTrue(new MoveToGoal(m_arm, Row.TOP)));
-    m_winch.setDefaultCommand(new RunCommand(() -> m_winch.winchExtend(m_operatorController)));
-      
+   try{
+     m_winch.setDefaultCommand(new RunCommand(() -> m_winch.winchExtend(m_operatorController)));
+   }
+   catch(IllegalArgumentException e) {
     
+   }
    
+    
+    m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
+    .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
+    
     //onTrue() can be changed to whileTrue() if we were to hold the button to shoot
-    m_operatorController.a().onTrue(new ShootMech(m_shooter));
+    //m_operatorController.a().onTrue(new ShootMech(m_shooter));
+
+    
     
 
 
@@ -98,9 +109,10 @@ public class RobotContainer{
   {
     chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(12), m_swerve));
     chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
-    chooser.addOption("Shoot and Move", new ShootAndMove(m_shooter, m_swerve));
+     //chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
+    /*chooser.addOption("Shoot and Move", new ShootAndMove(m_shooter, m_swerve));
     chooser.addOption("Shoot", new ShootMech(m_shooter));
-    chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
+   */
 
     SmartDashboard.putData(chooser);
   }

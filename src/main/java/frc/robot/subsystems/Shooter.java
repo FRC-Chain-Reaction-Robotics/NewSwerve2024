@@ -44,7 +44,7 @@ public class Shooter extends SubsystemBase{
   
    this.mSwerve = mSwerve;
 
-   shooterCANSparkMax = new CANSparkMax(11, MotorType.kBrushless);
+   shooterCANSparkMax = new CANSparkMax(15, MotorType.kBrushless);
    shooterCANSparkMaxTwo = new CANSparkMax(12, MotorType.kBrushless);
    shooterCANSparkMaxThree = new CANSparkMax(13, MotorType.kBrushless);
    shooterCANSparkMaxFour = new CANSparkMax(14, MotorType.kBrushless);

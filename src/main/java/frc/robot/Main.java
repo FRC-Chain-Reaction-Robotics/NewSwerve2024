@@ -5,6 +5,7 @@
 /* Github testing */
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Main {
@@ -18,5 +19,9 @@ public final class Main {
     catch(IllegalArgumentException e){
     }
     
+  }
+
+  public static void print(Object o) {
+    System.out.println("Angle of CANcoder: " + ((Rotation2d)o).getDegrees());
   }
 }
