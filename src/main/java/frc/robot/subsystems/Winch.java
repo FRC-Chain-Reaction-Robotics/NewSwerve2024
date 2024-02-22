@@ -5,17 +5,23 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+
 public class Winch extends SubsystemBase {
 
-     CANSparkMax winchCanSparkMax;
+    CANSparkMax winchCanSparkMax;
     CANSparkMax winchCanSparkMaxTwo;
+    RobotContainer holder;
 
      public Winch(){
+
+     holder = new RobotContainer();
+
      winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
      winchCanSparkMax.setInverted(false);
      winchCanSparkMax.setSmartCurrentLimit(60);
@@ -29,19 +35,18 @@ public class Winch extends SubsystemBase {
      
     }
     
-    public void winchExtend(CommandXboxController operator) {
-    
-     if(deadBand(operator.getRightY(), .3) > 0) {
-        winchCanSparkMax.set(1);
-        winchCanSparkMaxTwo.set(1);
+    public void winchExtend() {
+     if(deadBand(holder.m_operatorController.getRightY(), .3) > 0) {
+        winchCanSparkMax.set(.6);
+        //winchCanSparkMaxTwo.set(.6);
      }
-     else if(deadBand(operator.getRightY(), .3) < 0) {
-        winchCanSparkMax.set(-1);
-        winchCanSparkMaxTwo.set(-1);
+     else if(deadBand(holder.m_operatorController.getRightY(), .3) < 0) {
+        winchCanSparkMax.set(-.6);
+       // winchCanSparkMaxTwo.set(-.6);
      }
      else {
         winchCanSparkMax.set(0);
-        winchCanSparkMaxTwo.set(0);
+        //winchCanSparkMaxTwo.set(0);
      }
     }
 

@@ -39,7 +39,7 @@ public class RobotContainer{
 
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
-  private final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
+  public  final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
 
 
   
@@ -79,19 +79,22 @@ public class RobotContainer{
     // m_operatorController.a().onTrue(new MoveToGoal(m_arm, Row.BOTTOM))
     // .or(m_operatorController.b().onTrue(new MoveToGoal(m_arm, Row.MIDDLE)))
     // .or(m_operatorController.y().onTrue(new MoveToGoal(m_arm, Row.TOP)));
-   try{
+   
+   
+   /* try{
      m_winch.setDefaultCommand(new RunCommand(() -> m_winch.winchExtend(m_operatorController)));
    }
    catch(IllegalArgumentException e) {
     
-   }
+   } */
    
     
     m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
     .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
     
+    m_operatorController.leftStick().whileTrue(new RunCommand(() -> m_winch.winchExtend()));
     //onTrue() can be changed to whileTrue() if we were to hold the button to shoot
-    //m_operatorController.a().onTrue(new ShootMech(m_shooter));
+    m_operatorController.a().onTrue(new ShootMech(m_shooter));
 
     
     
@@ -99,8 +102,10 @@ public class RobotContainer{
 
     
     //slow mode for right bumper, medium slow for left bumper
-    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
-    .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.mediumMode(), m_swerve)))
+
+    //Changed from slow to fast on the first one and changed from medium to fast on the second m_swerve
+    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve))
+    .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
     .onFalse(new InstantCommand(() -> m_swerve.fastMode(), m_swerve));
     
   }
