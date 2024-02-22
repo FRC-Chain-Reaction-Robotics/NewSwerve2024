@@ -6,10 +6,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 
 
 public class Winch extends SubsystemBase {

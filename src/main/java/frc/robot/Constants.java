@@ -229,17 +229,11 @@ public class Constants {
         public static final int launchSpeedLimit = 60;
         public static final int feedSpeedLimit = 60;
 
-        private Apriltags m_Apriltags = new Apriltags();
-        private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
-        private PIDController m_XPidController = new PIDController(.6, 0, 0);
-        private PIDController m_YPidController = new PIDController(.6, 0, 0);
-        private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
-        private Swerve mSwerve;
-        private double tolerance = 0.1;
-        private boolean onTarget = false;
-        public boolean shoot = false;
-        private double areaTolerance = .01;
-        private double targetArea = 0.5;//calibrate this
+        public static final double tolerance = 0.1;
+        public static boolean onTarget = false;
+        public static boolean shoot = false;
+        public static double areaTolerance = .01;
+        public static double targetArea = 0.5;//calibrate this
 
 
 
