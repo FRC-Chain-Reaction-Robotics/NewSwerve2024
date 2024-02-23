@@ -80,6 +80,8 @@ public class Constants {
     //TODO: The inches is just a placeholder, need to measure how much it should realistically extend after robot is built
     public static final double kWinchLength = Units.inchesToMeters(30);
 
+    public static final double kWinchSpeed = .1;
+
     //TODO: The inches the robot pulls itself up
     public static final double kWinchPull = Units.inchesToMeters(40);
     
@@ -136,7 +138,7 @@ public class Constants {
         public static final int kFrontRightTurningCanId = 4;
         public static final int kFrontRightCanCoderId = 62;
         //Changed Front left now ???? - it was .369
-        public static final double kFrontRightChassisAngularOffset = -2*(Math.PI)*0.076;
+        public static final double kFrontRightChassisAngularOffset = 0;
         
          //Back Left Module
         public static final int kBackLeftDrivingCanId = 7;

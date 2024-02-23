@@ -91,10 +91,14 @@ public class RobotContainer{
     
     m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
     .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
+
+    m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_winch.on(Constants.Winches.kWinchSpeed), m_winch)).or(m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_winch.reverse(Constants.Winches.kWinchSpeed), m_winch)))
+    .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
     
-    m_operatorController.leftStick().whileTrue(new RunCommand(() -> m_winch.winchExtend()));
+    //m_operatorController.leftStick().whileTrue(new RunCommand(() -> m_winch.winchExtend()));
     //onTrue() can be changed to whileTrue() if we were to hold the button to shoot
-    m_operatorController.a().onTrue(new ShootMech(m_shooter));
+    
+   // m_operatorController.a().onTrue(new ShootMech(m_shooter));
 
     
     

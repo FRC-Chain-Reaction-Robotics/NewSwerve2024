@@ -14,41 +14,42 @@ public class Winch extends SubsystemBase {
 
     CANSparkMax winchCanSparkMax;
     CANSparkMax winchCanSparkMaxTwo;
-    RobotContainer holder;
-
      public Winch(){
 
-     holder = new RobotContainer();
-
      winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
-     winchCanSparkMax.setInverted(false);
-     winchCanSparkMax.setSmartCurrentLimit(60);
+     winchCanSparkMax.setSmartCurrentLimit(60, 40);
      winchCanSparkMax.setIdleMode(IdleMode.kBrake);
 
      winchCanSparkMaxTwo = new CANSparkMax(Constants.Winches.kRightWinchMotorID, MotorType.kBrushless);
-     winchCanSparkMaxTwo.setInverted(false);
-     winchCanSparkMaxTwo.setSmartCurrentLimit(60);
+     winchCanSparkMaxTwo.setSmartCurrentLimit(60, 40);
      winchCanSparkMaxTwo.setIdleMode(IdleMode.kBrake);
-     winchCanSparkMaxTwo.follow(winchCanSparkMax);
+
+     //winchCanSparkMaxTwo.follow(winchCanSparkMax);
      
     }
-    
-    public void winchExtend() {
-     if(deadBand(holder.m_operatorController.getRightY(), .3) > 0) {
-        winchCanSparkMax.set(.6);
-        //winchCanSparkMaxTwo.set(.6);
-     }
-     else if(deadBand(holder.m_operatorController.getRightY(), .3) < 0) {
-        winchCanSparkMax.set(-.6);
-       // winchCanSparkMaxTwo.set(-.6);
-     }
-     else {
-        winchCanSparkMax.set(0);
-        //winchCanSparkMaxTwo.set(0);
-     }
+
+    public void on(double speed){
+        winchCanSparkMax.setInverted(false);
+        winchCanSparkMaxTwo.setInverted(false);
+        winchCanSparkMax.set(speed);
+        winchCanSparkMaxTwo.set(speed);
+          
     }
 
-    private static double deadBand(double value, double deadband) {
+    public void off(){
+        winchCanSparkMax.set(0);
+        winchCanSparkMaxTwo.set(0);
+    }
+
+    public void reverse(double speed){
+        winchCanSparkMax.setInverted(true);
+        winchCanSparkMaxTwo.setInverted(true);
+        winchCanSparkMax.set(speed);
+        winchCanSparkMaxTwo.set(speed);
+    }
+
+
+   /*  private static double deadBand(double value, double deadband) {
         if(Math.abs(value) > deadband) {
             if(value > 0.0) {
                 return (value - deadband) / (1 -deadband);
@@ -59,7 +60,7 @@ public class Winch extends SubsystemBase {
         }
 
         return 0.0;
-    }  
+    }  */
 
     
 
