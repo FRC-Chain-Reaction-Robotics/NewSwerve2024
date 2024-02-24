@@ -260,18 +260,6 @@ public class Swerve extends SubsystemBase {
       Math.max(Math.abs(m_rearLeft.getDrivingRelativePosition()), Math.abs(m_rearRight.getDrivingRelativePosition())));
 	}
 
-  private static double deadBand(double value, double deadband)
-  {
-    if (Math.abs(value) > deadband)
-    {
-      if (value > 0.0)
-        return (value - deadband)/(1.0 - deadband);
-      else
-        return (value + deadband)/(1.0 - deadband);
-    }
-    else
-      return 0.0;
-  }
 
   /**
    * Sets the wheels into an X formation to prevent movement.

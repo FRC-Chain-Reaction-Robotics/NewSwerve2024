@@ -42,13 +42,12 @@ public class Constants {
     }
     
    /*  public static final class Arm {
-        //TODO: Change the arm length
         public static final double kArmlength = Units.inchesToMeters(28.25);
         public static final double kArmlengthExtended = Units.inchesToMeters(40);
         public static final double kArmReduction = 1;
         public static final double kArmEncoderPositionFactor = (2 * Math.PI);
         public static final double kArmEncoderVelocityFactor = kArmEncoderPositionFactor/60.0;
-        //TODO: Tune this! "solve for average radius"
+
         public static final double kArmLengthConversionFactor = 2*Math.PI/62;
         public static final double kArmLengthVelocityFactor = kArmLengthConversionFactor/60.0;
 
@@ -64,7 +63,7 @@ public class Constants {
         public static final double kMiddleAngle = .3;
         public static final double kTopAngle = .4;
 
-        //TODO: Update this MotorID to match the arm
+
         public static final int kRightMotorId = 13;
         public static final int kExtensionMotorId = 14;
         public static final double armEncoderOffset = .225;
@@ -73,7 +72,6 @@ public class Constants {
     /* Winches should basically be activated when the driver presses one button and the robot automatically pulls itself up */
     public static final class Winches {
     
-    //TODO: Update the motorID with the correct ones in the winches
      public static final int kRightWinchMotorID = 10;
      public static final int kLeftWinchMotorID = 11;
     
@@ -82,8 +80,6 @@ public class Constants {
 
     public static final double kWinchSpeed = .1;
 
-    //TODO: The inches the robot pulls itself up
-    public static final double kWinchPull = Units.inchesToMeters(40);
     
     /* Just as a precaution we might need to make sure the robot isn't driving before the button is pressed*/
     }
@@ -96,7 +92,7 @@ public class Constants {
 
         // measured 3/21/23
         //TODO: Change the swerve dimentions
-        public static final double kTrackWidth = Units.inchesToMeters(21.5);
+        public static final double kTrackWidth = Units.inchesToMeters(26.5);
         // Distance between centers of right and left wheels on robot
         // measured 3/21/23
         public static final double kWheelBase = Units.inchesToMeters(23.5);
@@ -228,8 +224,8 @@ public class Constants {
         public static final int kRightShooterMotorID = 4;
         public static final int kLeftShooterMotorID = 2;
 
-        public static final int launchSpeedLimit = 60;
-        public static final int feedSpeedLimit = 60;
+        public static final double launchSpeedLimit = .40;
+        public static final double feedSpeedLimit = .40;
 
         public static final double tolerance = 0.1;
         public static boolean onTarget = false;
