@@ -194,7 +194,7 @@ public class SwerveModule {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-    correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
+    correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRotations(m_chassisAngularOffset));
 
     
 
@@ -251,5 +251,10 @@ public class SwerveModule {
   public RelativeEncoder getTurningEncoder()
   {
     return  m_turningEncoder;
+  }
+
+  public double getTestOffset(){
+      double testOffset =  Constants.Swerve.kFrontLeftChassisAngularOffset;
+      return testOffset;
   }
 }

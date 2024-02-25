@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,7 +54,9 @@ public class Swerve extends SubsystemBase {
   private final NavX m_gyro = new NavX();
 
   // public PhotonCameraWrapper m_photonCamera;
-
+  private SwerveModuleState desiredState = new SwerveModuleState();
+  private SwerveModuleState correctedState = new SwerveModuleState();
+   private SwerveModuleState optimizedState = new SwerveModuleState();
   //Functions the same as SwerveDriveOdometry
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
@@ -106,12 +109,14 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("RearLeft DrivingRelativePosition", m_rearLeft.getDrivingRelativePosition());
     SmartDashboard.putNumber("RearLeft SteeringRelativePosition", m_rearLeft.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearLeft SteeringAbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
-        SmartDashboard.putNumber("RearLeft Driving Velocity", m_rearLeft.getDrivingVelocity());
+    SmartDashboard.putNumber("RearLeft Driving Velocity", m_rearLeft.getDrivingVelocity());
     SmartDashboard.putNumber("RearRight DrivingRelativePosition", m_rearRight.getDrivingRelativePosition());
     SmartDashboard.putNumber("RearRight SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearRight SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearRight Driving Velocity", m_rearRight.getDrivingVelocity());
+    SmartDashboard.putNumber("Desired angle",optimizedState.angle.getRotations());
 
+    SmartDashboard.putNumber("FL Offset Angle", m_frontLeft.getTestOffset());
     SmartDashboard.putNumber("Drive NavX Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive NavX Yaw", m_gyro.getYaw());
     SmartDashboard.putNumber("Drive NavX Pitch", m_gyro.getPitch());
@@ -250,6 +255,10 @@ public class Swerve extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[3]);
     m_rearLeft.setDesiredState(swerveModuleStates[0]);
     m_rearRight.setDesiredState(swerveModuleStates[1]);
+    desiredState = swerveModuleStates[3];
+    correctedState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+    correctedState.angle = desiredState.angle.plus(Rotation2d.fromRotations(Constants.Swerve.kFrontRightChassisAngularOffset));
+    optimizedState = SwerveModuleState.optimize(correctedState, new Rotation2d(m_frontRight.getTurningEncoder().getPosition()));
   }
 
   public double getDistanceMeters()

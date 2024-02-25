@@ -133,7 +133,6 @@ public class Constants {
         public static final int kFrontRightDrivingCanId = 3; 
         public static final int kFrontRightTurningCanId = 4;
         public static final int kFrontRightCanCoderId = 62;
-        //Changed Front left now ???? - it was .369
         public static final double kFrontRightChassisAngularOffset = 0;
         
          //Back Left Module
