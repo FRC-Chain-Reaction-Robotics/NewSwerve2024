@@ -92,13 +92,13 @@ public class RobotContainer{
     m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
     .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
 
-    m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_winch.on(Constants.Winches.kWinchSpeed), m_winch)).or(m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_winch.reverse(Constants.Winches.kWinchSpeed), m_winch)))
+    m_driverController.leftBumper().whileTrue(new RunCommand(() -> m_winch.leftOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.leftTrigger().whileTrue(new RunCommand(() -> m_winch.leftReverse(Constants.Winches.kWinchSpeed), m_winch)))
+    .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
+
+     m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
     .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
     
-    //m_operatorController.leftStick().whileTrue(new RunCommand(() -> m_winch.winchExtend()));
-    //onTrue() can be changed to whileTrue() if we were to hold the button to shoot
-    
-   // m_operatorController.a().onTrue(new ShootMech(m_shooter));
+    m_operatorController.a().whileTrue(new ShootMech(m_shooter)).whileFalse(new RunCommand(() -> m_shooter.off()));
 
     
     
@@ -108,9 +108,9 @@ public class RobotContainer{
     //slow mode for right bumper, medium slow for left bumper
 
     //Changed from slow to fast on the first one and changed from medium to fast on the second m_swerve
-    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve))
-    .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
-    .onFalse(new InstantCommand(() -> m_swerve.fastMode(), m_swerve));
+    m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
+    .or(m_driverController.b().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
+    .onFalse(new InstantCommand(() -> m_swerve.mediumMode(), m_swerve));
     
   }
 
@@ -118,10 +118,9 @@ public class RobotContainer{
   {
     chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(12), m_swerve));
     chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
-     //chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
-    /*chooser.addOption("Shoot and Move", new ShootAndMove(m_shooter, m_swerve));
+    chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
+    chooser.addOption("Shoot and Move", new ShootAndMove(m_shooter, m_swerve));
     chooser.addOption("Shoot", new ShootMech(m_shooter));
-   */
 
     SmartDashboard.putData(chooser);
   }

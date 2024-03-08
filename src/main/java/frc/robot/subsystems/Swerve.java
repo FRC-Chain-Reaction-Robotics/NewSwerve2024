@@ -114,9 +114,8 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("RearRight SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearRight SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearRight Driving Velocity", m_rearRight.getDrivingVelocity());
-    SmartDashboard.putNumber("Desired angle",optimizedState.angle.getRotations());
+ 
 
-    SmartDashboard.putNumber("FL Offset Angle", m_frontLeft.getTestOffset());
     SmartDashboard.putNumber("Drive NavX Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive NavX Yaw", m_gyro.getYaw());
     SmartDashboard.putNumber("Drive NavX Pitch", m_gyro.getPitch());
@@ -251,14 +250,11 @@ public class Swerve extends SubsystemBase {
         swerveModuleStates, Constants.Swerve.kMaxSpeedMetersPerSecond);
     
     //sets these wheels to the desired speed and angle
-    m_frontLeft.setDesiredState(swerveModuleStates[2]);
-    m_frontRight.setDesiredState(swerveModuleStates[3]);
-    m_rearLeft.setDesiredState(swerveModuleStates[0]);
-    m_rearRight.setDesiredState(swerveModuleStates[1]);
-    desiredState = swerveModuleStates[3];
-    correctedState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-    correctedState.angle = desiredState.angle.plus(Rotation2d.fromRotations(Constants.Swerve.kFrontRightChassisAngularOffset));
-    optimizedState = SwerveModuleState.optimize(correctedState, new Rotation2d(m_frontRight.getTurningEncoder().getPosition()));
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[2]);
+    m_rearLeft.setDesiredState(swerveModuleStates[1]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+    
   }
 
   public double getDistanceMeters()
@@ -288,10 +284,10 @@ public class Swerve extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, Constants.Swerve.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[2]);
-    m_frontRight.setDesiredState(desiredStates[3]);
-    m_rearLeft.setDesiredState(desiredStates[0]);
-    m_rearRight.setDesiredState(desiredStates[1]);
+    m_frontLeft.setDesiredState(desiredStates[0]);
+    m_frontRight.setDesiredState(desiredStates[2]);
+    m_rearLeft.setDesiredState(desiredStates[1]);
+    m_rearRight.setDesiredState(desiredStates[3]);
   }
 
   /** Resets the drive encoders to currently read a position of 0. */

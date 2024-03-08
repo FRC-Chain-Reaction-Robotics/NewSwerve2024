@@ -68,8 +68,6 @@ public class SwerveModule {
     m_canCoder = new CANcoder(canCoderCANId);
     cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    //cc_cfg.MagnetSensor.MagnetOffset = chassisAngularOffset;
-    m_canCoder.getConfigurator().apply(cc_cfg);
 
   
 
@@ -156,7 +154,7 @@ public class SwerveModule {
     m_chassisAngularOffset = chassisAngularOffset; 
     m_desiredState.angle = Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue()).getRadians());
+    m_turningEncoder.setPosition(Rotation2d.fromRotations(-m_canCoder.getAbsolutePosition().getValue()).getRadians());
     
   }
 
