@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,12 +14,14 @@ public class Winch extends SubsystemBase {
 
     CANSparkMax winchCanSparkMax;
     CANSparkMax winchCanSparkMaxTwo;
+    RelativeEncoder winchEncoder;
      public Winch(){
 
      winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
      winchCanSparkMax.setSmartCurrentLimit(60, 40);
      winchCanSparkMax.setIdleMode(IdleMode.kBrake);
 
+     winchEncoder = winchCanSparkMax.getEncoder();
      winchCanSparkMaxTwo = new CANSparkMax(Constants.Winches.kRightWinchMotorID, MotorType.kBrushless);
      winchCanSparkMaxTwo.setSmartCurrentLimit(60, 40);
      winchCanSparkMaxTwo.setIdleMode(IdleMode.kBrake);
@@ -27,12 +30,18 @@ public class Winch extends SubsystemBase {
      
     }
 
-    public void on(double speed){
+    public void leftOn(double speed){
         winchCanSparkMax.setInverted(false);
-        winchCanSparkMaxTwo.setInverted(false);
-        winchCanSparkMax.set(speed);
-        winchCanSparkMaxTwo.set(speed);
-          
+       // winchCanSparkMaxTwo.setInverted(false);
+        boolean cantGoUp = winchEncoder.getPosition() > 10;
+         if(cantGoUp && speed > 0) {
+            winchCanSparkMax.set(0);
+            //winchCanSparkMaxTwo.set(0);
+        }
+        else{
+            winchCanSparkMax.set(speed);
+         //   winchCanSparkMaxTwo.set(speed);
+        } 
     }
 
     public void off(){
@@ -40,11 +49,44 @@ public class Winch extends SubsystemBase {
         winchCanSparkMaxTwo.set(0);
     }
 
-    public void reverse(double speed){
+    public void leftReverse(double speed){
         winchCanSparkMax.setInverted(true);
-        winchCanSparkMaxTwo.setInverted(true);
-        winchCanSparkMax.set(speed);
-        winchCanSparkMaxTwo.set(speed);
+        boolean cantGoDown = winchEncoder.getPosition() < 0;
+
+        if(cantGoDown && speed < 0) {
+            winchCanSparkMax.set(0);
+           // winchCanSparkMaxTwo.set(0);
+        }
+        else{
+            winchCanSparkMax.set(speed);
+            //winchCanSparkMaxTwo.set(speed);
+        }
+    }
+
+    
+
+    public void rightOn(double speed){
+        winchCanSparkMax.setInverted(false);
+       // winchCanSparkMaxTwo.setInverted(false);
+        boolean cantGoUp = winchEncoder.getPosition() > 10;
+         if(cantGoUp && speed > 0) {
+            winchCanSparkMaxTwo.set(0);
+        }
+        else{
+            winchCanSparkMaxTwo.set(speed);
+        } 
+    }
+
+    public void rightReverse(double speed){
+        winchCanSparkMaxTwo.setInverted(false);
+        boolean cantGoDown = winchEncoder.getPosition() < 0;
+
+        if(cantGoDown && speed < 0) {
+            winchCanSparkMaxTwo.set(0);
+        }
+        else{
+            winchCanSparkMaxTwo.set(speed);
+        }
     }
 
 

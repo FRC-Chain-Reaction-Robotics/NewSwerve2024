@@ -78,7 +78,7 @@ public class Constants {
     //TODO: The inches is just a placeholder, need to measure how much it should realistically extend after robot is built
     public static final double kWinchLength = Units.inchesToMeters(30);
 
-    public static final double kWinchSpeed = .1;
+    public static final double kWinchSpeed = .2;
 
     
     /* Just as a precaution we might need to make sure the robot isn't driving before the button is pressed*/
@@ -107,6 +107,7 @@ public class Constants {
         //Calculates to Approximately 18.5429440372 rads/sec (Too much??)
         public static final double kMaxAngularSpeed = kMaxSpeedMetersPerSecond/Math.hypot(kTrackWidth/2.0, kWheelBase/2.0); // radians per second
         
+        //TODO: Change the slew rate limiter value here
         public static final double kMaxAccel = kMaxSpeedMetersPerSecond * 2;
 
         public static final double kMaxAngularAccel = kMaxAccel/Math.hypot(kTrackWidth/2.0, kWheelBase/2.0);
@@ -201,8 +202,8 @@ public class Constants {
         public static final double kTurningMinOutput = -1;
         public static final double kTurningMaxOutput = 1;
     
-        public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
-        public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode kDrivingMotorIdleMode = IdleMode.kCoast;
+        public static final IdleMode kTurningMotorIdleMode = IdleMode.kCoast;
     
         public static final int kDrivingMotorCurrentLimit = 40; // amps
         public static final int kTurningMotorCurrentLimit = 30; // amps

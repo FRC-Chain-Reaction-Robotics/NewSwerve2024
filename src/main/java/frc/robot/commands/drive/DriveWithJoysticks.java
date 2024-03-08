@@ -41,7 +41,7 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   public void end(boolean interrupted) {
-   m_swerve.drive(0, 0, 0, true);
+   m_swerve.drive(0, 0, 0, false);
   }
 
   @Override
