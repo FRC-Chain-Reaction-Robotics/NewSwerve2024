@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.proto.System;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Main;
@@ -45,12 +46,17 @@ public class SwerveModule {
   private final SparkPIDController m_drivingPIDController; ////PID for driving
   private final SparkPIDController m_turningPIDController; ////PID for turning
 
+  private boolean m_checkDriveMotor;
+  private boolean m_checkTurnMotor;
+  private boolean m_checkCanCoder;
+
   private double m_chassisAngularOffset = 0; ////allows individual wheels to offset correctly
 
   ////SwerveModuleState objects stores the desired speed in meters per second and angle in radians for your wheels
   ////Used to help set your wheels running at a certain speed in a direction
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
-  
+
+
   ////allows you to apply settings you made to the cancoder
   private CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
   
@@ -65,14 +71,13 @@ public class SwerveModule {
    * @param chassisAngularOffset the offset to make the wheels face forward
    */
   public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
+<<<<<<< Updated upstream
     m_canCoder = new CANcoder(canCoderCANId);
     cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+=======
+>>>>>>> Stashed changes
 
-  
-
-    
-    //config.MagnetSensor = withAbsoluteSensorRange.Unsigned_0_to_360;
 
     ////boots the wheel to its current position rather than zero
    //config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
@@ -88,6 +93,11 @@ public class SwerveModule {
     // SDS Module is inverted relative to the MAXSwerve
     m_drivingSparkMax.setInverted(true);;
     m_turningSparkMax.setInverted(true);;
+
+    m_chassisAngularOffset = chassisAngularOffset;
+    m_canCoder = new CANcoder(canCoderCANId);
+    cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
@@ -147,14 +157,17 @@ public class SwerveModule {
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
 
-    // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
     Timer.delay(1);
 
     // CANcoder angle is measured in degrees so we need to convert that into radians
     m_chassisAngularOffset = chassisAngularOffset; 
-    m_desiredState.angle = Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
+    m_desiredState.angle = Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
     m_drivingEncoder.setPosition(0);
+<<<<<<< Updated upstream
     m_turningEncoder.setPosition(Rotation2d.fromRotations(-m_canCoder.getAbsolutePosition().getValue()).getRadians());
+=======
+    m_turningEncoder.setPosition(Units.rotationsToRadians(-m_canCoder.getAbsolutePosition().getValueAsDouble()));
+>>>>>>> Stashed changes
     
   }
 
@@ -244,6 +257,14 @@ public class SwerveModule {
   {
     m_drivingSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kDrivingMotorCurrentLimit);
     m_turningSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kTurningMotorCurrentLimit);
+  }
+
+  public boolean delay(){
+    m_checkDriveMotor = m_drivingSparkMax.getFirmwareVersion() != 0;
+    m_checkTurnMotor = m_turningSparkMax.getFirmwareVersion() != 0;
+    m_checkCanCoder = m_canCoder.getDeviceID() != 0;
+
+    return m_checkDriveMotor && m_checkTurnMotor && m_checkCanCoder;
   }
 
   public RelativeEncoder getTurningEncoder()

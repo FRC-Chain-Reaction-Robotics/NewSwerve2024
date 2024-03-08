@@ -114,7 +114,10 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("RearRight SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearRight SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearRight Driving Velocity", m_rearRight.getDrivingVelocity());
+<<<<<<< Updated upstream
  
+=======
+>>>>>>> Stashed changes
 
     SmartDashboard.putNumber("Drive NavX Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive NavX Yaw", m_gyro.getYaw());
