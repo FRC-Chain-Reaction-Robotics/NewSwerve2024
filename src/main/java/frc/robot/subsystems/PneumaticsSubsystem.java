@@ -19,7 +19,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   
   public PneumaticsSubsystem() {
     try{
-      ds = new DoubleSolenoid(6 ,PneumaticsModuleType.CTREPCM, 1, 2);
+      ds = new DoubleSolenoid(42 ,PneumaticsModuleType.CTREPCM, 1, 2);
       ds.set(Value.kForward);
     }
     catch(AllocationException e) {

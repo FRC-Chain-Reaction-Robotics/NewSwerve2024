@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
 
+
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+
 
 
 import frc.robot.Constants;
@@ -10,8 +14,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
+
+
 /* Github testing */
 public class ManualShooter extends SubsystemBase{
+
+
+
+
 
 
 
@@ -24,10 +34,9 @@ public class ManualShooter extends SubsystemBase{
   //TODO: update the launch speed
 
 
-  private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
-  private PIDController m_XPidController = new PIDController(.6, 0, 0);
-  private PIDController m_YPidController = new PIDController(.6, 0, 0);
-//    private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
+
+
+  private PneumaticsSubsystem m_PneumaticsSubsystem;
   private Swerve m_Swerve;
   //private double tolerance = 0.1;
   //private boolean onTarget = false;
@@ -38,8 +47,16 @@ public class ManualShooter extends SubsystemBase{
 
 
 
-  public ManualShooter(Swerve m_Swerve) {
+
+
+
+
+  public ManualShooter(Swerve m_Swerve, PneumaticsSubsystem m_PneumaticsSubsystem) {
    this.m_Swerve = m_Swerve;
+   this.m_PneumaticsSubsystem = m_PneumaticsSubsystem;
+
+
+
 
 
 
@@ -51,9 +68,13 @@ public class ManualShooter extends SubsystemBase{
   shooterCANSparkMaxFour = new CANSparkMax(14, MotorType.kBrushless);
 
 
-  shooterCANSparkMax.setInverted(true);
+
+
+  shooterCANSparkMax.setInverted(false);
   shooterCANSparkMax.setSmartCurrentLimit(40);
   shooterCANSparkMax.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+
+
 
 
   shooterCANSparkMaxTwo.setInverted(false);
@@ -61,9 +82,11 @@ public class ManualShooter extends SubsystemBase{
   shooterCANSparkMaxTwo.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
 
-  shooterCANSparkMaxThree.setInverted(false);
+
+  shooterCANSparkMaxThree.setInverted(true);
   shooterCANSparkMaxThree.setSmartCurrentLimit(40);
   shooterCANSparkMaxThree.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
+
 
 
   shooterCANSparkMaxFour.setInverted(true);
@@ -71,41 +94,78 @@ public class ManualShooter extends SubsystemBase{
   shooterCANSparkMaxFour.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
 
+
+
    //following
-  shooterCANSparkMaxTwo.follow(shooterCANSparkMax);
-  shooterCANSparkMaxFour.follow(shooterCANSparkMaxThree);
 
 
-  //tolerance
-  m_XPidController.setTolerance(Constants.Shooter.tolerance);
-  m_YPidController.setTolerance(Constants.Shooter.tolerance);
+
+
 //    m_AreaPidController.setTolerance(Constants.Shooter.areaTolerance);
   }
 
 
 
 
+
+
+
+
   public void shooterAngleUp(double speed){
-    shooterCANSparkMaxThree.setInverted(false);
+    //makes the motor move clockwise
+     shooterCANSparkMaxThree.setInverted(false);
+    //TODO: check inverted
+    shooterCANSparkMax.setInverted(true);
     shooterCANSparkMaxThree.set(speed);
-}
+    shooterCANSparkMax.set(speed);
+  }
 
 
-public void off(){
+
+
+
+
+public void angleOff(){
     shooterCANSparkMaxThree.set(0);
+    shooterCANSparkMax.set(0);
 }
 
-//TODO: Change 
+
+public void shootOff() {
+  shooterCANSparkMaxFour.set(0);
+  shooterCANSparkMaxTwo.set(0);
+}
+
+
+public void ringIntake(double speed) {
+
+
+  shooterCANSparkMaxFour.setInverted(true);
+  shooterCANSparkMaxTwo.setInverted(false);
+  shooterCANSparkMaxTwo.set(speed);
+  shooterCANSparkMaxFour.set(speed);
+}
+
+
+//TODO: Change
 public void shooterAngleDown(double speed){
     shooterCANSparkMaxThree.setInverted(true);
+    //TODO: check inverted
+    shooterCANSparkMax.setInverted(false);
     shooterCANSparkMaxThree.set(speed);
+    shooterCANSparkMax.set(speed);
 }
 public void cherryBomb() {
         //TODO: Add the launch speed
-        shooterCANSparkMax.set(Constants.Shooter.launchSpeedLimit);
-        while(shooterCANSparkMax.getEncoder().getVelocity()<0.6){
+        shooterCANSparkMaxTwo.setInverted(true);
+        shooterCANSparkMaxFour.setInverted(true);
+        shooterCANSparkMaxTwo.set(Constants.Shooter.launchSpeed);
+        shooterCANSparkMaxFour.set(Constants.Shooter.launchSpeed);
+        if(shooterCANSparkMaxTwo.getEncoder().getVelocity()>=Constants.Shooter.launchSpeedLimit){
+          // m_PneumaticsSubsystem.toggle();
         }
-        m_PneumaticsSubsystem.toggle();
+       
 }
+
 
 }

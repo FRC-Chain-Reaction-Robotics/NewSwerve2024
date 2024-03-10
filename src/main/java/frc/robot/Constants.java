@@ -64,8 +64,8 @@ public class Constants {
         public static final double kTopAngle = .4;
 
 
-        public static final int kRightMotorId = 13;
-        public static final int kExtensionMotorId = 14;
+        public static final int kRightMotorId = 20;
+        public static final int kExtensionMotorId = 24;
         public static final double armEncoderOffset = .225;
     } */
 
@@ -78,7 +78,7 @@ public class Constants {
     //TODO: The inches is just a placeholder, need to measure how much it should realistically extend after robot is built
     public static final double kWinchLength = Units.inchesToMeters(30);
 
-    public static final double kWinchSpeed = .2;
+    public static final double kWinchSpeed = .35;
 
     
     /* Just as a precaution we might need to make sure the robot isn't driving before the button is pressed*/
@@ -215,16 +215,15 @@ public class Constants {
         //TODO: Match the correct Motor ID and intakeSpeed
         public static final int kIntakeMotorId = 9;
 
-        public static final double kIntakeSpeed = .1;
+        public static final double kIntakeSpeed = .35;
       }
 
       public static final class Shooter {
 
-        //TODO: Change the motor IDs and the shooter speed
-        public static final int kRightShooterMotorID = 4;
-        public static final int kLeftShooterMotorID = 2;
 
         public static final double launchSpeedLimit = .40;
+
+        public static final double launchSpeed = .65;
         public static final double feedSpeedLimit = .40;
 
         public static final double tolerance = 0.1;
@@ -233,6 +232,7 @@ public class Constants {
         public static double areaTolerance = .01;
         public static double targetArea = 0.5;//calibrate this
 
+        public static double shooterAngleSpeed = .15;
 
 
       }
