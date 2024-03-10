@@ -15,7 +15,7 @@ public class Shooter extends SubsystemBase{
 
 
 
-
+/* 
   CANSparkMax shooterCANSparkMax;
   CANSparkMax shooterCANSparkMaxTwo;
  
@@ -94,18 +94,18 @@ public class Shooter extends SubsystemBase{
          while(shooterCANSparkMax.getEncoder().getVelocity()<0.6||!Constants.Shooter.onTarget){
               Constants.Shooter.onTarget = withinXTolerance&&withinYTolerance;//&&withinAreaTolerance
               if(!withinXTolerance){
-                   m_Swerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change */), false);
+                   m_Swerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change ), false);
               }
               if(!withinYTolerance){
                    shooterCANSparkMaxThree.set(m_YPidController.calculate(m_Apriltags.getY(), 0));
               }
               // if(!withinAreaTolerance){
-              //      m_Swerve.drive(m_AreaPidController.calculate(m_Apriltags.getArea(), /* TODO: Change the setpoint */Constants.Shooter.targetArea), 0, 0, false);
+              //      m_Swerve.drive(m_AreaPidController.calculate(m_Apriltags.getArea(), /* TODO: Change the setpoint Constants.Shooter.targetArea), 0, 0, false);
               // }
          }
          m_PneumaticsSubsystem.toggle();
     }
-  }
+  } 
  
      /*public boolean shootBAM() {
      double speedDifference = m_shooterPidController.calculate(shooterCANSparkMax.getEncoder().getVelocity(), Constants.Shooter.launchSpeedLimit);

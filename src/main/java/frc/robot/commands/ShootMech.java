@@ -18,16 +18,16 @@ public class ShootMech extends Command{
         addRequirements(m_shooter);
     }
 
-    public void limeExecute() {
-        m_shooter.cherryBomb();
-    }
+   // public void limeExecute() {
+    //    m_shooter.cherryBomb();
+   // }
 
     public void execute() {
         m_manShooter.cherryBomb();
     }
 
     public boolean interrupted() {
-        return m_shooter.shoot || m_manShooter.shoot;
+        return /*m_shooter.shoot ||*/ m_manShooter.shoot;
     }
 
     

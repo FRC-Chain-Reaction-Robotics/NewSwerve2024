@@ -223,8 +223,7 @@ public class Constants {
 
         public static final double launchSpeedLimit = .40;
 
-        public static final double launchSpeed = .65;
-        public static final double feedSpeedLimit = .40;
+        public static final double launchSpeed = .8;
 
         public static final double tolerance = 0.1;
         public static boolean onTarget = false;
@@ -232,7 +231,7 @@ public class Constants {
         public static double areaTolerance = .01;
         public static double targetArea = 0.5;//calibrate this
 
-        public static double shooterAngleSpeed = .15;
+        public static double shooterAngleSpeed = .1;
 
 
       }

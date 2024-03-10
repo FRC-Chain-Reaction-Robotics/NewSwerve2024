@@ -34,7 +34,7 @@ public class RobotContainer{
    // Subsystem creation
   private Swerve m_swerve = new Swerve();
   private Winch m_winch = new Winch();
-  private Shooter m_shooter = new Shooter(m_swerve);
+  //private Shooter m_shooter = new Shooter(m_swerve);
   
   private Intake m_intake = new Intake();
   public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
@@ -73,8 +73,6 @@ public class RobotContainer{
    // m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.resetEncoders(), m_swerve));
     m_driverController.x().onTrue(new InstantCommand(() -> m_swerve.setX(), m_swerve));
 
-    // Triggers solenoid on press of button b.
-    m_driverController.b().onTrue(new InstantCommand(() -> m_PneumaticsSubsystem.toggle()));
    
 
     //m_operatorController.x().onTrue(new InstantCommand(() -> m_arm.getExtensionEncoder().setPosition(0), m_arm));
@@ -100,8 +98,8 @@ public class RobotContainer{
     .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
 
     //Winches
-     m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
-    .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
+    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
+   // .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
     
 
     //Shooter
@@ -111,6 +109,8 @@ public class RobotContainer{
     m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
     .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
 
+    // Triggers solenoid on press of button b.
+    m_operatorController.x().onTrue(new InstantCommand(() -> m_PneumaticsSubsystem.toggle()));
     
     
 
@@ -119,8 +119,8 @@ public class RobotContainer{
     //slow mode for right bumper, medium slow for left bumper
 
     //Changed from slow to fast on the first one and changed from medium to fast on the second m_swerve
-    m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
-    .or(m_driverController.b().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
+    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
+    .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
     .onFalse(new InstantCommand(() -> m_swerve.mediumMode(), m_swerve));
     
   }

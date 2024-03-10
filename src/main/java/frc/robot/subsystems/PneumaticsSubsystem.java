@@ -10,17 +10,19 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  DoubleSolenoid ds;
+  private DoubleSolenoid ds;
   
   public PneumaticsSubsystem() {
     try{
       ds = new DoubleSolenoid(42 ,PneumaticsModuleType.CTREPCM, 1, 2);
-      ds.set(Value.kForward);
+      ds.set(DoubleSolenoid.Value.kForward);
     }
     catch(AllocationException e) {
 
@@ -55,10 +57,11 @@ public class PneumaticsSubsystem extends SubsystemBase {
   {
     ds.toggle();
   }
+
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    //Do nothing
   }
 
   @Override

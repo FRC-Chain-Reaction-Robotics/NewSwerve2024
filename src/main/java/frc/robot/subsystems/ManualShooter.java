@@ -142,8 +142,8 @@ public void ringIntake(double speed) {
 
   shooterCANSparkMaxFour.setInverted(true);
   shooterCANSparkMaxTwo.setInverted(false);
-  shooterCANSparkMaxTwo.set(speed);
-  shooterCANSparkMaxFour.set(speed);
+  shooterCANSparkMaxTwo.set(speed / 2);
+  shooterCANSparkMaxFour.set(speed / 2);
 }
 
 
@@ -161,9 +161,6 @@ public void cherryBomb() {
         shooterCANSparkMaxFour.setInverted(true);
         shooterCANSparkMaxTwo.set(Constants.Shooter.launchSpeed);
         shooterCANSparkMaxFour.set(Constants.Shooter.launchSpeed);
-        if(shooterCANSparkMaxTwo.getEncoder().getVelocity()>=Constants.Shooter.launchSpeedLimit){
-          // m_PneumaticsSubsystem.toggle();
-        }
        
 }
 
