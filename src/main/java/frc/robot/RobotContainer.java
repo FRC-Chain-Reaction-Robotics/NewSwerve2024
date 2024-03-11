@@ -5,6 +5,8 @@
 /* Github testing */
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +32,7 @@ import frc.robot.subsystems.ManualShooter;
 public class RobotContainer{
 
   private final SendableChooser<Command> chooser = new SendableChooser<Command>();
+  private final SendableChooser<BooleanSupplier> orientationChooser = new SendableChooser<BooleanSupplier>();
 
    // Subsystem creation
   private Swerve m_swerve = new Swerve();
@@ -46,6 +49,10 @@ public class RobotContainer{
 
   
   public RobotContainer() {
+    orientationChooser.setDefaultOption("Robot Oriented", () -> false);
+    orientationChooser.addOption("Field Oriented", () -> true);
+    SmartDashboard.putData(orientationChooser);
+    
     setupDrive(); 
     configureButtonBindings();
     //Creating a dropdown for autonomous commands to choose from
@@ -62,7 +69,8 @@ public class RobotContainer{
         m_swerve,
         () -> modifyAxis(-m_driverController.getLeftY()),
         () -> modifyAxis(m_driverController.getLeftX()),
-        () -> modifyAxis(-m_driverController.getRightX())
+        () -> modifyAxis(-m_driverController.getRightX()),
+        orientationChooser.getSelected()
       )
     );
   }
@@ -71,12 +79,14 @@ public class RobotContainer{
     //DRIVER
     m_driverController.y().onTrue(new InstantCommand(() -> m_swerve.zeroHeading(), m_swerve));
    // m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.resetEncoders(), m_swerve));
-    m_driverController.x().onTrue(new InstantCommand(() -> m_swerve.setX(), m_swerve));
+    m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.setX(), m_swerve));
 
+    // Triggers solenoid on press of button b.
+    m_driverController.x().onTrue(new InstantCommand(() -> m_PneumaticsSubsystem.toggle()));
    
 
     //m_operatorController.x().onTrue(new InstantCommand(() -> m_arm.getExtensionEncoder().setPosition(0), m_arm));
-
+ 
     //TODO: Fix Arm Angle Offsets in Arm.java first before uncommenting
     // m_operatorController.a().onTrue(new MoveToGoal(m_arm, Row.BOTTOM))
     // .or(m_operatorController.b().onTrue(new MoveToGoal(m_arm, Row.MIDDLE)))
@@ -94,12 +104,12 @@ public class RobotContainer{
     m_operatorController.y().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.b().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
     .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
 
-    m_driverController.leftBumper().whileTrue(new RunCommand(() -> m_winch.leftOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.leftTrigger().whileTrue(new RunCommand(() -> m_winch.leftReverse(Constants.Winches.kWinchSpeed), m_winch)))
-    .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
+   // m_driverController.leftBumper().whileTrue(new RunCommand(() -> m_winch.leftOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.leftTrigger().whileTrue(new RunCommand(() -> m_winch.leftReverse(Constants.Winches.kWinchSpeed), m_winch)))
+   // .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
 
     //Winches
-    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
-   // .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
+     //m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
+//.onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
     
 
     //Shooter
@@ -109,8 +119,6 @@ public class RobotContainer{
     m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
     .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
 
-    // Triggers solenoid on press of button b.
-    m_operatorController.x().onTrue(new InstantCommand(() -> m_PneumaticsSubsystem.toggle()));
     
     
 

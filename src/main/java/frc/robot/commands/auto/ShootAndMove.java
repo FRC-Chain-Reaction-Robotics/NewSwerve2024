@@ -11,7 +11,7 @@ public class ShootAndMove extends SequentialCommandGroup {
 
     public ShootAndMove(ManualShooter m_shooter, Swerve m_Swerve)
     {
-        
+        //TODO: Change up Shoot and Move
         addCommands(new ShootMech(m_shooter), new DriveToDistance(-3, m_Swerve));
     }
     

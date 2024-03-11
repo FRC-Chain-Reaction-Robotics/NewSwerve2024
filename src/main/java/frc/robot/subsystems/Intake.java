@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase{
     }
     public void reverse(double speed){
         intakeCANSparkMax.setInverted(true);
-        intakeCANSparkMax.set(speed * 2);
+        intakeCANSparkMax.set(speed / 2);
     }
     
 }

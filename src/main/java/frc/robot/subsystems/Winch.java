@@ -40,20 +40,12 @@ public class Winch extends SubsystemBase {
         winchCanSparkMax.setInverted(false);
         winchCanSparkMax.set(speed);
         } 
-    
-
-    public void off(){
-        winchCanSparkMax.set(0);
-        winchCanSparkMaxTwo.set(0);
-    }
 
     public void leftReverse(double speed){
         winchCanSparkMax.setInverted(true);
         winchCanSparkMax.set(speed);
             
      }
-
-    
 
     public void rightOn(double speed){
         winchCanSparkMaxTwo.setInverted(false);
@@ -66,6 +58,10 @@ public class Winch extends SubsystemBase {
         
     }
 
+    public void off(){
+        winchCanSparkMax.set(0);
+        winchCanSparkMaxTwo.set(0);
+    }
     @Override
     public void periodic(){
      SmartDashboard.putNumber("Left Winch Position", getLeftPosition());

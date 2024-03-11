@@ -242,6 +242,7 @@ public class Swerve extends SubsystemBase {
     //for each swerve module with the given kinematics
     var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
+        /*TODO: change the sign if the field relative robot is not driving forward */
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
