@@ -9,7 +9,7 @@ public class MoveandAmp extends SequentialCommandGroup {
 
     public MoveandAmp(Intake m_intake, Swerve m_Swerve){
         //TODO: Test TurnToAngle
-        addCommands(new DriveToDistance(3, m_Swerve), new TurnToAngle(-90, m_Swerve), new InstantCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed)));
+        addCommands(new DriveToDistance(1.5, m_Swerve), new TurnToAngle(-90, m_Swerve), new DriveToDistance(.25, m_Swerve), new InstantCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed)));
         
     }
     

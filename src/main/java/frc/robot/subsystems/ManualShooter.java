@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 
 
+
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,17 +20,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /* Github testing */
 public class ManualShooter extends SubsystemBase{
 
-
-
-
-
-
-
-
   CANSparkMax shooterCANSparkMax;
-  CANSparkMax shooterCANSparkMaxTwo;
- 
   CANSparkMax shooterCANSparkMaxThree;
+
+  //Two and Four are for shooting
+  CANSparkMax shooterCANSparkMaxTwo;
   CANSparkMax shooterCANSparkMaxFour;
   //TODO: update the launch speed
 
@@ -37,7 +32,7 @@ public class ManualShooter extends SubsystemBase{
 
 
   private PneumaticsSubsystem m_PneumaticsSubsystem;
-  private Swerve m_Swerve;
+  private Swerve m_Swerve;  
   //private double tolerance = 0.1;
   //private boolean onTarget = false;
   public boolean shoot = false;
@@ -103,13 +98,6 @@ public class ManualShooter extends SubsystemBase{
 
 //    m_AreaPidController.setTolerance(Constants.Shooter.areaTolerance);
   }
-
-
-
-
-
-
-
 
   public void shooterAngleUp(double speed){
     //makes the motor move clockwise
