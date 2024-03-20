@@ -216,6 +216,10 @@ public class SwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
+  public double getVoltage(){
+    return ((SwerveModule) m_turningEncoder).getVoltage();
+  }
+
   public double getSteeringRelativePosition(){
    return m_turningEncoder.getPosition();
   }

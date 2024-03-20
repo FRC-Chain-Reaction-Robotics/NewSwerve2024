@@ -206,7 +206,7 @@ public class Constants {
         public static final IdleMode kTurningMotorIdleMode = IdleMode.kCoast;
     
         public static final int kDrivingMotorCurrentLimit = 40; // amps
-        public static final int kTurningMotorCurrentLimit = 30; // amps
+        public static final int kTurningMotorCurrentLimit = 40; // amps
       }
 
 

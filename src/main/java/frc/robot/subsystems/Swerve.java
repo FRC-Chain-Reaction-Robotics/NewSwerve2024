@@ -267,7 +267,7 @@ public class Swerve extends SubsystemBase {
 	}
 
 
-  /**
+  /** 
    * Sets the wheels into an X formation to prevent movement.
    */
   public void setX() {
@@ -313,6 +313,7 @@ public class Swerve extends SubsystemBase {
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
   }
+
 
   /**
    * Returns the turn rate of the robot.
