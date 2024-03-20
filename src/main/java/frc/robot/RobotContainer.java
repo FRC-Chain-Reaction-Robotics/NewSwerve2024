@@ -37,11 +37,11 @@ public class RobotContainer{
    // Subsystem creation
   private Swerve m_swerve = new Swerve();
   private Winch m_winch = new Winch();
-  //private Shooter m_shooter = new Shooter(m_swerve);
+  private Shooter m_shooter = new Shooter(m_swerve);
   
   private Intake m_intake = new Intake();
   public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
-  private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
+ // private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
   public  final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
@@ -113,14 +113,16 @@ public class RobotContainer{
     
 
     //Shooter
-    m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_manShooter.cherryBomb())).or(m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.launchSpeed))))
-    .onFalse(new RunCommand(() -> m_manShooter.shootOff()));
+   // m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_manShooter.cherryBomb())).or(m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.launchSpeed))))
+   // .onFalse(new RunCommand(() -> m_manShooter.shootOff()));
    
-    m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
-    .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
+   // m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
+    //.onFalse(new RunCommand(() -> m_manShooter.angleOff()));
 
     
-    
+    m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_shooter.groundIntake())).whileFalse(new RunCommand(() -> m_shooter.returnToUp()));
+
+    m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_shooter.cherryBomb()));
 
 
     

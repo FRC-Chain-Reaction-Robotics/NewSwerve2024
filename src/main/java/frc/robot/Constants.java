@@ -219,12 +219,13 @@ public class Constants {
 
       public static final class Shooter {
 
-
-        public static final double launchSpeedLimit = .40;
+        public static final double intakeSpeedLimit = 0.35;
+        public static final double launchSpeedLimit = 1.0;
 
         public static final double launchSpeed = .8;
 
-        public static final double tolerance = 0.1;
+        public static final double xTolerance = 0.1;
+        public static final double yTolerance = 0.1;
         public static boolean onTarget = false;
         public static boolean shoot = false;
         public static double areaTolerance = .01;

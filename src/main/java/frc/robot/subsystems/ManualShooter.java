@@ -84,6 +84,7 @@ public void shootOff() {
  shooterTalonFXTwo.set(0);
 }
 
+//MODIFY IT TO WHERE IT WILL EXTEND TO INTAKE POSITION, SUCKS THE RING IN, AND THEN GO BACK TO NORMAL POSITION
 public void ringIntake(double speed) {
 
  shooterTalonFXFour.setInverted(true);
