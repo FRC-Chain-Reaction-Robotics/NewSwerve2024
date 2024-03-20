@@ -72,7 +72,9 @@ public class Constants {
     /* Winches should basically be activated when the driver presses one button and the robot automatically pulls itself up */
     public static final class Winches {
     
-     public static final int kWinchMotorID = 10;
+     public static final int kLeftWinchMotorID = 10;
+     public static final int kRightWinchMotorID = 11;
+
     
     //TODO: The inches is just a placeholder, need to measure how much it should realistically extend after robot is built
     public static final double kWinchLength = Units.inchesToMeters(30);
