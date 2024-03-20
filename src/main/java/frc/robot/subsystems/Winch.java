@@ -14,43 +14,66 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Winch extends SubsystemBase {
 
     CANSparkMax winchCanSparkMax;
-    RelativeEncoder winchEncoder;
+    CANSparkMax winchCanSparkMaxTwo;
+    RelativeEncoder winchLeftEncoder;
+    RelativeEncoder winchRightEncoder;
      public Winch(){
 
-     winchCanSparkMax = new CANSparkMax(Constants.Winches.kWinchMotorID, MotorType.kBrushless);
+     winchCanSparkMax = new CANSparkMax(Constants.Winches.kLeftWinchMotorID, MotorType.kBrushless);
      winchCanSparkMax.setSmartCurrentLimit(60, 40);
      winchCanSparkMax.setIdleMode(IdleMode.kBrake);
 
-     winchEncoder = winchCanSparkMax.getEncoder();
+     winchLeftEncoder = winchCanSparkMax.getEncoder();
 
+     winchCanSparkMaxTwo = new CANSparkMax(Constants.Winches.kRightWinchMotorID, MotorType.kBrushless);
+     winchCanSparkMaxTwo.setSmartCurrentLimit(60, 40);
+     winchCanSparkMaxTwo.setIdleMode(IdleMode.kBrake);
 
+     winchRightEncoder = winchCanSparkMaxTwo.getEncoder();
 
-     winchEncoder.setPosition(0);
+     winchLeftEncoder.setPosition(0);
+     winchRightEncoder.setPosition(0);
      
     }
 
-    public void on(double speed){
+    public void leftOn(double speed){
         winchCanSparkMax.setInverted(false);
         winchCanSparkMax.set(speed);
         } 
 
-    public void reverse(double speed){
+    public void leftReverse(double speed){
         winchCanSparkMax.setInverted(true);
         winchCanSparkMax.set(speed);
             
      }
 
+    public void rightOn(double speed){
+        winchCanSparkMaxTwo.setInverted(false);
+         winchCanSparkMaxTwo.set(speed);
+    }
+
+    public void rightReverse(double speed){
+        winchCanSparkMaxTwo.setInverted(true);
+        winchCanSparkMaxTwo.set(speed);
+        
+    }
+
     public void off(){
         winchCanSparkMax.set(0);
+        winchCanSparkMaxTwo.set(0);
     }
     @Override
     public void periodic(){
-     SmartDashboard.putNumber("Winch Position", getPosition());
+     SmartDashboard.putNumber("Left Winch Position", getLeftPosition());
+     SmartDashboard.putNumber("Right Winch Encoder", getRightPosition());
     }
 
+    public double getRightPosition(){
+        return winchRightEncoder.getPosition();
+    }
 
-    public double getPosition() {
-        return winchEncoder.getPosition();
+    public double getLeftPosition() {
+        return winchLeftEncoder.getPosition();
     }
 
 
