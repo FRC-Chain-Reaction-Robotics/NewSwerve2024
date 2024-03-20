@@ -35,12 +35,12 @@ public class RobotContainer{
   private final SendableChooser<BooleanSupplier> orientationChooser = new SendableChooser<BooleanSupplier>();
 
    // Subsystem creation
+  public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
   private Swerve m_swerve = new Swerve();
   private Winch m_winch = new Winch();
-  private Shooter m_shooter = new Shooter(m_swerve);
+  private Shooter m_shooter = new Shooter(m_swerve, m_PneumaticsSubsystem);
   
   private Intake m_intake = new Intake();
-  public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
  // private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);

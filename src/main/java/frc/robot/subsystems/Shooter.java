@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase{
 
 
   private Apriltags m_Apriltags = new Apriltags();
-  private PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
+  private PneumaticsSubsystem m_PneumaticsSubsystem;
   private PIDController m_XPidController = new PIDController(.6, 0, 0);
   private PIDController m_YPidController = new PIDController(.6, 0, 0);
   private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase{
 
 
 
-  public Shooter(Swerve m_Swerve) {
+  public Shooter(Swerve m_Swerve, PneumaticsSubsystem m_PneumaticsSubsystem) {
   this.m_Swerve = m_Swerve;
   this.m_PneumaticsSubsystem = m_PneumaticsSubsystem;
 
