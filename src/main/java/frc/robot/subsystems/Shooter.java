@@ -130,7 +130,7 @@ public class Shooter extends SubsystemBase{
          shooterTalonFXTwo.set(Constants.Shooter.launchSpeedLimit);
          shooterTalonFXFour.set(Constants.Shooter.launchSpeedLimit);
          while(shooterTalonFXTwo.getVelocity().getValueAsDouble()<0.6 && shooterTalonFXFour.getVelocity().getValueAsDouble() < 0.6||!Constants.Shooter.onTarget){
-              Constants.Shooter.onTarget = withinXTolerance&&withinYToleranceShooter;//&&withinAreaTolerance
+              Constants.Shooter.onTarget = withinXTolerance&&withinYToleranceShooter&&withinAreaTolerance;
               if(!withinXTolerance){
                    m_Swerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change */ ), false);
               }
