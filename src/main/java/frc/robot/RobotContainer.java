@@ -27,6 +27,7 @@ import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ManualShooter;
+import frc.robot.subsystems.HybridShooter;
 
 
 public class RobotContainer{
