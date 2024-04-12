@@ -53,12 +53,12 @@ public class ManualShooter extends SubsystemBase{
 
  shooterTalonFXTwo.setInverted(false);
  //TODO: This is replacing setSmartCurrentLimit so watch out for it
- shooterTalonFXTwo.setVoltage(40);
+ //shooterTalonFXTwo.setVoltage(40);
  shooterTalonFXTwo.setNeutralMode(NeutralModeValue.Brake);
  //shooterTalonFXTwo.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
  shooterTalonFXFour.setInverted(true);
- shooterTalonFXFour.setVoltage(40);
+ //shooterTalonFXFour.setVoltage(40);
  shooterTalonFXFour.setNeutralMode(NeutralModeValue.Brake);
  //shooterTalonFXFour.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
@@ -67,7 +67,7 @@ public class ManualShooter extends SubsystemBase{
 
  public void shooterAngleUp(double speed){
    //makes the motor move clockwise
-    shooterCANSparkMaxThree.setInverted(false);
+    shooterCANSparkMaxThree.setInverted(true);
    //TODO: check inverted
    shooterCANSparkMax.setInverted(true);
    shooterCANSparkMaxThree.set(speed);
@@ -96,7 +96,7 @@ public void ringIntake(double speed) {
 
 //TODO: Change
 public void shooterAngleDown(double speed){
-   shooterCANSparkMaxThree.setInverted(true);
+   shooterCANSparkMaxThree.setInverted(false);
    //TODO: check inverted
    shooterCANSparkMax.setInverted(false);
    shooterCANSparkMaxThree.set(speed);

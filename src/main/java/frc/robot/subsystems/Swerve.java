@@ -53,6 +53,8 @@ public class Swerve extends SubsystemBase {
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
+  //private DriveOrientation m_orientation = new DriveOrientation();
+
   // public PhotonCameraWrapper m_photonCamera;
   private SwerveModuleState desiredState = new SwerveModuleState();
   private SwerveModuleState correctedState = new SwerveModuleState();
@@ -243,7 +245,7 @@ public class Swerve extends SubsystemBase {
     var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
         /*TODO: change the sign if the field relative robot is not driving forward */
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     //limits the wheel speeds
