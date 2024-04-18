@@ -45,7 +45,7 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   public void end(boolean interrupted) {
-   m_swerve.drive(0, 0, 0, m_BooleanSupplier.getAsBoolean());
+   m_swerve.drive(0, 0, 0, /*m_BooleanSupplier.getAsBoolean()*/ true);
   }
 
   @Override

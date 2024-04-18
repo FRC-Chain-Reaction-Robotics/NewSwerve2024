@@ -72,6 +72,8 @@ public class Swerve extends SubsystemBase {
       new Pose2d());
 
   private final Field2d m_fieldSim = new Field2d();
+
+  private static boolean localFieldRelative;
   
   //TODO: This is where you decrease the Default Speed
   public static final double output = .8;
@@ -117,7 +119,7 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("RearRight SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearRight Driving Velocity", m_rearRight.getDrivingVelocity());
  
-
+    SmartDashboard.putBoolean("field relative boolean", localFieldRelative);
     SmartDashboard.putNumber("Drive NavX Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive NavX Yaw", m_gyro.getYaw());
     SmartDashboard.putNumber("Drive NavX Pitch", m_gyro.getPitch());
@@ -221,7 +223,7 @@ public class Swerve extends SubsystemBase {
     // xSpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Swerve.kMaxAngularSpeed;
-
+  localFieldRelative = fieldRelative; 
     //multiply by output to change the speed, useful for slow mode or medium slow mode
     xSpeed *= m_output;
     ySpeed *= m_output;
@@ -242,11 +244,12 @@ public class Swerve extends SubsystemBase {
 
     //converts your desired chassis speeds into the appropriate speed and angles 
     //for each swerve module with the given kinematics
-    var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
-        fieldRelative
+    var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw())));
+       // fieldRelative
         /*TODO: change the sign if the field relative robot is not driving forward */
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw()))
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+           /* ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
+            : new ChassisSpeeds(xSpeed, ySpeed, rot)); */
+
 
     //limits the wheel speeds
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -346,15 +349,15 @@ public class Swerve extends SubsystemBase {
     m_rearLeft.getTurningEncoder().setPosition(Math.toRadians(m_rearLeft.getSteeringAbsolutePosition()));
     m_rearRight.getTurningEncoder().setPosition(Math.toRadians(m_rearRight.getSteeringAbsolutePosition()));
   }
-  // private static ChassisSpeeds fieldRelativeSpeeds(double vxMetersPerSecond,
-  // double vyMetersPerSecond,
-  // double omegaRadiansPerSecond,
-  // Rotation2d robotAngle) //Math for ChassisSpeeds.fromFieldRelativeSpeeds() could be incorrect.
-  // {
-  //   return new ChassisSpeeds(
-  //     vxMetersPerSecond * robotAngle.getCos() + vyMetersPerSecond * robotAngle.getSin(),
-  //     -vxMetersPerSecond * robotAngle.getSin() + vyMetersPerSecond * robotAngle.getCos(),
-  //     omegaRadiansPerSecond);
-  // }
+ private static ChassisSpeeds fieldRelativeSpeeds(double vxMetersPerSecond,
+   double vyMetersPerSecond,
+   double omegaRadiansPerSecond,
+   Rotation2d robotAngle) //Math for ChassisSpeeds.fromFieldRelativeSpeeds() could be incorrect.
+   {
+     return new ChassisSpeeds(
+      vxMetersPerSecond * robotAngle.getCos() + vyMetersPerSecond * robotAngle.getSin(),
+       -vxMetersPerSecond * robotAngle.getSin() + vyMetersPerSecond * robotAngle.getCos(),
+       omegaRadiansPerSecond);
+   }
 
 }

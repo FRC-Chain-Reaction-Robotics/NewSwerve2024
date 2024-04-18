@@ -72,7 +72,8 @@ public class RobotContainer{
         () -> modifyAxis(m_driverController.getLeftY()),
         () -> modifyAxis(-m_driverController.getLeftX()),
         () -> modifyAxis(m_driverController.getRightX()),
-        orientationChooser.getSelected()
+       orientationChooser.getSelected()
+    
       )
     );
   }
@@ -80,7 +81,7 @@ public class RobotContainer{
   private void configureButtonBindings() {
     //DRIVER
     m_driverController.y().onTrue(new InstantCommand(() -> m_swerve.zeroHeading(), m_swerve));
-   // m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.resetEncoders(), m_swerve));
+    //m_driverController.b().onTrue(new InstantCommand(() -> m_swerve.resetEncoders(), m_swerve));
     m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.setX(), m_swerve));
 
     // Triggers solenoid on press of button b.
