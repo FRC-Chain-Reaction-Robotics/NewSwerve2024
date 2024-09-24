@@ -79,10 +79,12 @@ public void angleOff(){
    shooterCANSparkMax.set(0);
 }
 
+/*
 public void shootOff() {
  shooterTalonFXFour.set(0);
  shooterTalonFXTwo.set(0);
 }
+ */
 
 //MODIFY IT TO WHERE IT WILL EXTEND TO INTAKE POSITION, SUCKS THE RING IN, AND THEN GO BACK TO NORMAL POSITION
 public void ringIntake(double speed) {
@@ -93,7 +95,7 @@ public void ringIntake(double speed) {
  shooterTalonFXFour.set(speed / 2);
 }
 
-
+/*
 //TODO: Change
 public void shooterAngleDown(double speed){
    shooterCANSparkMaxThree.setInverted(false);
@@ -102,6 +104,8 @@ public void shooterAngleDown(double speed){
    shooterCANSparkMaxThree.set(speed);
    shooterCANSparkMax.set(speed);
 }
+*/
+
 public void cherryBomb() {
        //TODO: Add the launch speed
        shooterTalonFXTwo.setInverted(true);
