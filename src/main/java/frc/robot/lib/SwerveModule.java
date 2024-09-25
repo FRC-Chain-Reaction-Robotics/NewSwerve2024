@@ -31,46 +31,52 @@ import frc.robot.Main;
 
 public class SwerveModule {
 
-  ////CANSparkMax motor controllers, ID them on REV Hardware Client or SparkMax Client
-  private final CANSparkMax m_drivingSparkMax; ////controls driving on a swerve module
-  private final CANSparkMax m_turningSparkMax; ////controls turning on a swerve module
+  //// CANSparkMax motor controllers, ID them on REV Hardware Client or SparkMax
+  //// Client
+  private final CANSparkMax m_drivingSparkMax; //// controls driving on a swerve module
+  private final CANSparkMax m_turningSparkMax; //// controls turning on a swerve module
 
-  private final RelativeEncoder m_drivingEncoder; ////encoder for driving
-  private final RelativeEncoder m_turningEncoder; ////encoder for turning
-  private final CANcoder m_canCoder; ////another turning encoder for the absolute position, ID on phoenix tuner
+  private final RelativeEncoder m_drivingEncoder; //// encoder for driving
+  private final RelativeEncoder m_turningEncoder; //// encoder for turning
+  private final CANcoder m_canCoder; //// another turning encoder for the absolute position, ID on phoenix tuner
 
-  ////PID means Proportional Integral Derivative; uses an equation; accounts for "close enough"
-  ////formula is u(t) = kP(e(t)) + kI(integral 0 to t of (e(t)dt)) + kD(d(e(t))/dt), 
-  ////tuning integral constant NOT recommended
-  private final SparkPIDController m_drivingPIDController; ////PID for driving
-  private final SparkPIDController m_turningPIDController; ////PID for turning
+  //// PID means Proportional Integral Derivative; uses an equation; accounts for
+  //// "close enough"
+  //// formula is u(t) = kP(e(t)) + kI(integral 0 to t of (e(t)dt)) +
+  //// kD(d(e(t))/dt),
+  //// tuning integral constant NOT recommended
+  private final SparkPIDController m_drivingPIDController; //// PID for driving
+  private final SparkPIDController m_turningPIDController; //// PID for turning
 
-  private double m_chassisAngularOffset = 0; ////allows individual wheels to offset correctly
+  private double m_chassisAngularOffset = 0; //// allows individual wheels to offset correctly
 
-  ////SwerveModuleState objects stores the desired speed in meters per second and angle in radians for your wheels
-  ////Used to help set your wheels running at a certain speed in a direction
+  //// SwerveModuleState objects stores the desired speed in meters per second and
+  //// angle in radians for your wheels
+  //// Used to help set your wheels running at a certain speed in a direction
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
-  
-  ////allows you to apply settings you made to the cancoder
+
+  //// allows you to apply settings you made to the cancoder
   private CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
-  
+
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
-   * encoder, and PID controller. This configuration is specific to the REV  
+   * encoder, and PID controller. This configuration is specific to the REV
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
-   * @param drivingCANId the ID for the drive controller
-   * @param turningCANId the ID for the turn controller
-   * @param canCoderCANId the ID for the cancoder
+   * 
+   * @param drivingCANId         the ID for the drive controller
+   * @param turningCANId         the ID for the turn controller
+   * @param canCoderCANId        the ID for the cancoder
    * @param chassisAngularOffset the offset to make the wheels face forward
    */
   public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
-  
-    //config.MagnetSensor = withAbsoluteSensorRange.Unsigned_0_to_360;
 
-    ////boots the wheel to its current position rather than zero
-   //config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-    
+    // config.MagnetSensor = withAbsoluteSensorRange.Unsigned_0_to_360;
+
+    //// boots the wheel to its current position rather than zero
+    // config.initializationStrategy =
+    //// SensorInitializationStrategy.BootToAbsolutePosition;
+
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
 
@@ -115,16 +121,18 @@ public class SwerveModule {
     m_turningPIDController.setPositionPIDWrappingMinInput(Constants.SwerveModule.kTurningEncoderPositionPIDMinInput);
     m_turningPIDController.setPositionPIDWrappingMaxInput(Constants.SwerveModule.kTurningEncoderPositionPIDMaxInput);
 
-    // Set the PID gains for the driving motor. Note these are example gains, and you
+    // Set the PID gains for the driving motor. Note these are example gains, and
+    // you
     // may need to tune them for your own robot!
     m_drivingPIDController.setP(Constants.SwerveModule.kDrivingP);
     m_drivingPIDController.setI(Constants.SwerveModule.kDrivingI);
     m_drivingPIDController.setD(Constants.SwerveModule.kDrivingD);
     m_drivingPIDController.setFF(Constants.SwerveModule.kDrivingFF);
     m_drivingPIDController.setOutputRange(Constants.SwerveModule.kDrivingMinOutput,
-      Constants.SwerveModule.kDrivingMaxOutput);
+        Constants.SwerveModule.kDrivingMaxOutput);
 
-    // Set the PID gains for the turning motor. Note these are example gains, and you
+    // Set the PID gains for the turning motor. Note these are example gains, and
+    // you
     // may need to tune them for your own robot!
     m_turningPIDController.setP(Constants.SwerveModule.kTurningP);
     m_turningPIDController.setI(Constants.SwerveModule.kTurningI);
@@ -145,15 +153,17 @@ public class SwerveModule {
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
 
-    // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
+    // This allows time for the absolute position to be sent by the CANcoder (we
+    // know this isn't the best solution, we'll fix it later)
     Timer.delay(1);
 
     // CANcoder angle is measured in degrees so we need to convert that into radians
-    m_chassisAngularOffset = chassisAngularOffset; 
+    m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Rotation2d.fromRotations(-m_canCoder.getAbsolutePosition().getValueAsDouble()).getRadians());
-    
+    m_turningEncoder
+        .setPosition(Rotation2d.fromRotations(-m_canCoder.getAbsolutePosition().getValueAsDouble()).getRadians());
+
   }
 
   /**
@@ -192,9 +202,8 @@ public class SwerveModule {
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRotations(m_chassisAngularOffset));
 
-    
-
-    // Optimize the reference state to avoid spinning further than 90 degrees (allow shortcuts for the wheels to turn to).
+    // Optimize the reference state to avoid spinning further than 90 degrees (allow
+    // shortcuts for the wheels to turn to).
     SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
         new Rotation2d(m_turningEncoder.getPosition()));
 
@@ -202,10 +211,10 @@ public class SwerveModule {
     m_drivingPIDController.setP(Constants.SwerveModule.kDrivingP);
     m_drivingPIDController.setD(Constants.SwerveModule.kDrivingD);
 
-    //another way to run your motors. first parameter is the value, second parameter is the control type
+    // another way to run your motors. first parameter is the value, second
+    // parameter is the control type
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
-
 
     m_desiredState = desiredState;
 
@@ -216,45 +225,43 @@ public class SwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
-  public double getVoltage(){
+  public double getVoltage() {
     return ((SwerveModule) m_turningEncoder).getVoltage();
   }
 
-  public double getSteeringRelativePosition(){
-   return m_turningEncoder.getPosition();
+  public double getSteeringRelativePosition() {
+    return m_turningEncoder.getPosition();
   }
 
-  public double getSteeringAbsolutePosition(){
+  public double getSteeringAbsolutePosition() {
     return m_canCoder.getAbsolutePosition().getValue();
   }
 
-  public double getDrivingRelativePosition(){
+  public double getDrivingRelativePosition() {
     return m_drivingEncoder.getPosition();
   }
 
-  public double getDrivingVelocity(){
+  public double getDrivingVelocity() {
     return m_drivingEncoder.getVelocity();
   }
-  
-  public void evilMode() //Typhoon Reference :)
+
+  public void evilMode() // Typhoon Reference :)
   {
     m_drivingSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kDrivingMotorCurrentLimit + 20);
     m_turningSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kTurningMotorCurrentLimit + 20);
   }
 
-  public void goodMode()
-  {
+  public void goodMode() {
     m_drivingSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kDrivingMotorCurrentLimit);
     m_turningSparkMax.setSmartCurrentLimit(Constants.SwerveModule.kTurningMotorCurrentLimit);
   }
 
-  public RelativeEncoder getTurningEncoder()
-  {
-    return  m_turningEncoder;
+  public RelativeEncoder getTurningEncoder() {
+    return m_turningEncoder;
   }
 
-  public double getTestOffset(){
-      double testOffset =  Constants.Swerve.kFrontLeftChassisAngularOffset;
-      return testOffset;
+  public double getTestOffset() {
+    double testOffset = Constants.Swerve.kFrontLeftChassisAngularOffset;
+    return testOffset;
   }
 }

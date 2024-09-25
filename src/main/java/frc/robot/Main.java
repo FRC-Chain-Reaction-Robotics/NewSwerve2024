@@ -9,19 +9,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Main {
-  private Main() {}
+  private Main() {
+  }
 
   public static void main(String... args) {
 
-    try{
-    RobotBase.startRobot(Robot::new);
+    try {
+      RobotBase.startRobot(Robot::new);
+    } catch (IllegalArgumentException e) {
     }
-    catch(IllegalArgumentException e){
-    }
-    
+
   }
 
+  // Just in case swerve troubleshooting needed
   public static void print(Object o) {
-    System.out.println("Angle of CANcoder: " + ((Rotation2d)o).getDegrees());
+    System.out.println("Angle of CANcoder: " + ((Rotation2d) o).getDegrees());
   }
 }

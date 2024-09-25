@@ -39,16 +39,16 @@ public class NavX extends AHRS {
    *
    * @return the velocity of the robot.
    */
-/*
-  private double getVelocity() {
-    // Get the X and Y velocity of the robot.
-    double x = getVelocityX();
-    double y = getVelocityY();
-
-    // Compute and return the Euclidean velocity of the robot.
-    return Math.sqrt((x * x) + (y * y));
-  }
-*/
+  /*
+   * private double getVelocity() {
+   * // Get the X and Y velocity of the robot.
+   * double x = getVelocityX();
+   * double y = getVelocityY();
+   * 
+   * // Compute and return the Euclidean velocity of the robot.
+   * return Math.sqrt((x * x) + (y * y));
+   * }
+   */
 
   /**
    * Gets a rotation matrix representing the robot's current heading.

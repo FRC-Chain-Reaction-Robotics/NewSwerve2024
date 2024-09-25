@@ -4,6 +4,7 @@
 // license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 /* Github testing */
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -35,7 +36,7 @@ public class Swerve extends SubsystemBase {
   private final SwerveModule m_frontRight = new SwerveModule(
       Constants.Swerve.kFrontRightDrivingCanId,
       Constants.Swerve.kFrontRightTurningCanId,
-      Constants.Swerve.kFrontRightCanCoderId, 
+      Constants.Swerve.kFrontRightCanCoderId,
       Constants.Swerve.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new SwerveModule(
@@ -47,52 +48,51 @@ public class Swerve extends SubsystemBase {
   private final SwerveModule m_rearRight = new SwerveModule(
       Constants.Swerve.kBackRightDrivingCanId,
       Constants.Swerve.kBackRightTurningCanId,
-      Constants.Swerve.kBackRightCanCoderId, 
+      Constants.Swerve.kBackRightCanCoderId,
       Constants.Swerve.kBackRightChassisAngularOffset);
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
-  //private DriveOrientation m_orientation = new DriveOrientation();
+  // private DriveOrientation m_orientation = new DriveOrientation();
 
   // public PhotonCameraWrapper m_photonCamera;
   private SwerveModuleState desiredState = new SwerveModuleState();
   private SwerveModuleState correctedState = new SwerveModuleState();
-   private SwerveModuleState optimizedState = new SwerveModuleState();
-  //Functions the same as SwerveDriveOdometry
-  private final SwerveDrivePoseEstimator m_poseEstimator = 
-    new SwerveDrivePoseEstimator(
-      Constants.Swerve.kDriveKinematics, 
-      Rotation2d.fromDegrees(m_gyro.getAngle()), 
+  private SwerveModuleState optimizedState = new SwerveModuleState();
+  // Functions the same as SwerveDriveOdometry
+  private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+      Constants.Swerve.kDriveKinematics,
+      Rotation2d.fromDegrees(m_gyro.getAngle()),
       new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_rearLeft.getPosition(),
-        m_rearRight.getPosition()}, 
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition() },
       new Pose2d());
 
   private final Field2d m_fieldSim = new Field2d();
 
   private static boolean localFieldRelative;
-  
-  //TODO: This is where you decrease the Default Speed
+
+  // TODO: This is where you decrease the Default Speed
   public static final double output = .8;
 
   public static double m_output = output;
 
-  //limits the acceleration of the x, y, and rotational speeds
+  // limits the acceleration of the x, y, and rotational speeds
   public SlewRateLimiter xLimiter = new SlewRateLimiter(Constants.Swerve.kMaxAccel);
   public SlewRateLimiter yLimiter = new SlewRateLimiter(Constants.Swerve.kMaxAccel);
   public SlewRateLimiter rotLimiter = new SlewRateLimiter(Constants.Swerve.kMaxAngularAccel);
 
   public Swerve() {
     // m_photonCamera = new PhotonCameraWrapper(
-    //   Constants.Vision.kCameraName,
-    //   Constants.Vision.kRobotToCamera,
-    //   PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-    //   Constants.Vision.kAprilTagFieldLayout
+    // Constants.Vision.kCameraName,
+    // Constants.Vision.kRobotToCamera,
+    // PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+    // Constants.Vision.kAprilTagFieldLayout
     // );
-    
+
     SmartDashboard.putData("Field", m_fieldSim);
     SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
     SmartDashboard.setDefaultNumber("D", Constants.SwerveModule.kDrivingD);
@@ -103,91 +103,93 @@ public class Swerve extends SubsystemBase {
     updatePose();
 
     SmartDashboard.putNumber("FrontLeft DrivingRelativePosition", m_frontLeft.getDrivingRelativePosition());
-    //SmartDashboard.putNumber("FrontLeft SteeringRelativePosition", m_frontLeft.getSteeringRelativePosition());
+    // SmartDashboard.putNumber("FrontLeft SteeringRelativePosition",
+    // m_frontLeft.getSteeringRelativePosition());
     SmartDashboard.putNumber("FrontLeft SteeringAbsolutePosition", m_frontLeft.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("FrontLeft Driving Velocity", m_frontLeft.getDrivingVelocity());
     SmartDashboard.putNumber("FrontRight DrivingRelativePosition", m_frontRight.getDrivingRelativePosition());
-    //SmartDashboard.putNumber("FrontRight SteeringRelativePosition", m_frontRight.getSteeringRelativePosition());
+    // SmartDashboard.putNumber("FrontRight SteeringRelativePosition",
+    // m_frontRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("FrontRight SteeringAbsolutePosition", m_frontRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("FrontRight Driving Velocity", m_frontRight.getDrivingVelocity());
     SmartDashboard.putNumber("RearLeft DrivingRelativePosition", m_rearLeft.getDrivingRelativePosition());
-   // SmartDashboard.putNumber("RearLeft SteeringRelativePosition", m_rearLeft.getSteeringRelativePosition());
+    // SmartDashboard.putNumber("RearLeft SteeringRelativePosition",
+    // m_rearLeft.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearLeft SteeringAbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearLeft Driving Velocity", m_rearLeft.getDrivingVelocity());
     SmartDashboard.putNumber("RearRight DrivingRelativePosition", m_rearRight.getDrivingRelativePosition());
-    //SmartDashboard.putNumber("RearRight SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
+    // SmartDashboard.putNumber("RearRight SteeringRelativePosition",
+    // m_rearRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("RearRight SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("RearRight Driving Velocity", m_rearRight.getDrivingVelocity());
- 
+
     SmartDashboard.putBoolean("field relative boolean", localFieldRelative);
     SmartDashboard.putNumber("Drive NavX Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive NavX Yaw", m_gyro.getYaw());
     SmartDashboard.putNumber("Drive NavX Pitch", m_gyro.getPitch());
-  
+
   }
-   
-  //updates the pose periodically
+
+  // updates the pose periodically
   public void updatePose() {
     m_poseEstimator.update(
-      m_gyro.getRotation2d(), 
-      new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_rearLeft.getPosition(),
-        m_rearRight.getPosition()
-    });
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        });
 
-    // Optional<EstimatedRobotPose> cameraResult = m_photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+    // Optional<EstimatedRobotPose> cameraResult =
+    // m_photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
     // if (leftCameraResult.isPresent()) {
-    //   EstimatedRobotPose camPose = leftCameraResult.get();
-    //   m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-    //}
+    // EstimatedRobotPose camPose = leftCameraResult.get();
+    // m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(),
+    // camPose.timestampSeconds);
+    // }
 
-  //   m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
-    }
+    // m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
+  }
 
-   /**
-    * Returns the currently-estimated pose of the robot.
-    *
-    * @return The pose.
-    */
-   public Pose2d getPose() {
-     return m_poseEstimator.getEstimatedPosition();
-   }
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return m_poseEstimator.getEstimatedPosition();
+  }
 
-  public NavX getGyro()
-  {
+  public NavX getGyro() {
     return m_gyro;
   }
 
-  public void slowMode()
-  {
+  public void slowMode() {
     m_frontLeft.evilMode();
     m_frontRight.evilMode();
     m_rearLeft.evilMode();
     m_rearRight.evilMode();
 
-		m_output = 0.2;
+    m_output = 0.2;
   }
 
-  public void mediumMode()
-  {
+  public void mediumMode() {
     m_frontLeft.evilMode();
     m_frontRight.evilMode();
     m_rearLeft.evilMode();
     m_rearRight.evilMode();
 
-		m_output = 0.5;
+    m_output = 0.5;
   }
 
-  public void fastMode()
-  {
+  public void fastMode() {
     m_frontLeft.goodMode();
     m_frontRight.goodMode();
     m_rearLeft.goodMode();
     m_rearRight.goodMode();
 
-		m_output = output;
+    m_output = output;
   }
 
   /**
@@ -206,7 +208,7 @@ public class Swerve extends SubsystemBase {
         },
         pose);
 
-      m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
+    m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 
   /**
@@ -219,60 +221,63 @@ public class Swerve extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    // Adjust input based on   speed
+    // Adjust input based on speed
     // xSpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Swerve.kMaxAngularSpeed;
-  localFieldRelative = fieldRelative; 
-    //multiply by output to change the speed, useful for slow mode or medium slow mode
+    localFieldRelative = fieldRelative;
+    // multiply by output to change the speed, useful for slow mode or medium slow
+    // mode
     xSpeed *= m_output;
     ySpeed *= m_output;
     rot *= m_output;
 
-
     // double deadband = Constants.Swerve.kMaxSpeedMetersPerSecond / 10;
     // xSpeed = deadBand(xSpeed, deadband);
     // ySpeed = deadBand(ySpeed, deadband);
-    
+
     // double deadbandRot = 2 * Math.PI / 9.45;
     // rot = deadBand(rot, deadbandRot);
 
-    //returns the modified speed if rate of change is above maximum
+    // returns the modified speed if rate of change is above maximum
     xSpeed = xLimiter.calculate(xSpeed);
     ySpeed = yLimiter.calculate(ySpeed);
     rot = rotLimiter.calculate(rot);
 
-    //converts your desired chassis speeds into the appropriate speed and angles 
-    //for each swerve module with the given kinematics
-    var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw())));
-       // fieldRelative
-        /*TODO: change the sign if the field relative robot is not driving forward */
-           /* ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
-            : new ChassisSpeeds(xSpeed, ySpeed, rot)); */
+    // converts your desired chassis speeds into the appropriate speed and angles
+    // for each swerve module with the given kinematics
+    var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
+        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw())));
+    // fieldRelative
+    /* TODO: change the sign if the field relative robot is not driving forward */
+    /*
+     * ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,
+     * Rotation2d.fromDegrees(m_gyro.getYaw()))
+     * : new ChassisSpeeds(xSpeed, ySpeed, rot));
+     */
 
-
-    //limits the wheel speeds
+    // limits the wheel speeds
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.Swerve.kMaxSpeedMetersPerSecond);
-    
-    //sets these wheels to the desired speed and angle
+
+    // sets these wheels to the desired speed and angle
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[2]);
     m_rearLeft.setDesiredState(swerveModuleStates[1]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
-    
+
   }
 
-  public double getDistanceMeters()
-	{
-		// return 0.0;
-		return Math.max(
-      Math.max(Math.abs(m_frontLeft.getDrivingRelativePosition()), Math.abs(m_frontRight.getDrivingRelativePosition())),
-      Math.max(Math.abs(m_rearLeft.getDrivingRelativePosition()), Math.abs(m_rearRight.getDrivingRelativePosition())));
-	}
+  public double getDistanceMeters() {
+    // return 0.0;
+    return Math.max(
+        Math.max(Math.abs(m_frontLeft.getDrivingRelativePosition()),
+            Math.abs(m_frontRight.getDrivingRelativePosition())),
+        Math.max(Math.abs(m_rearLeft.getDrivingRelativePosition()),
+            Math.abs(m_rearRight.getDrivingRelativePosition())));
+  }
 
-
-  /** 
+  /**
    * Sets the wheels into an X formation to prevent movement.
    */
   public void setX() {
@@ -308,7 +313,6 @@ public class Swerve extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
   }
-  
 
   /**
    * Returns the heading of the robot.
@@ -318,7 +322,6 @@ public class Swerve extends SubsystemBase {
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
   }
-
 
   /**
    * Returns the turn rate of the robot.
@@ -342,22 +345,22 @@ public class Swerve extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, m_rearRight.getState().angle));
   }
 
-  public void setToCurrentPosition()
-  {
+  public void setToCurrentPosition() {
     m_frontLeft.getTurningEncoder().setPosition(Math.toRadians(m_frontLeft.getSteeringAbsolutePosition()));
     m_frontRight.getTurningEncoder().setPosition(Math.toRadians(m_frontRight.getSteeringAbsolutePosition()));
     m_rearLeft.getTurningEncoder().setPosition(Math.toRadians(m_rearLeft.getSteeringAbsolutePosition()));
     m_rearRight.getTurningEncoder().setPosition(Math.toRadians(m_rearRight.getSteeringAbsolutePosition()));
   }
- private static ChassisSpeeds fieldRelativeSpeeds(double vxMetersPerSecond,
-   double vyMetersPerSecond,
-   double omegaRadiansPerSecond,
-   Rotation2d robotAngle) //Math for ChassisSpeeds.fromFieldRelativeSpeeds() could be incorrect.
-   {
-     return new ChassisSpeeds(
-      vxMetersPerSecond * robotAngle.getCos() + vyMetersPerSecond * robotAngle.getSin(),
-       -vxMetersPerSecond * robotAngle.getSin() + vyMetersPerSecond * robotAngle.getCos(),
-       omegaRadiansPerSecond);
-   }
+
+  private static ChassisSpeeds fieldRelativeSpeeds(double vxMetersPerSecond,
+      double vyMetersPerSecond,
+      double omegaRadiansPerSecond,
+      Rotation2d robotAngle) // Math for ChassisSpeeds.fromFieldRelativeSpeeds() could be incorrect.
+  {
+    return new ChassisSpeeds(
+        vxMetersPerSecond * robotAngle.getCos() + vyMetersPerSecond * robotAngle.getSin(),
+        -vxMetersPerSecond * robotAngle.getSin() + vyMetersPerSecond * robotAngle.getCos(),
+        omegaRadiansPerSecond);
+  }
 
 }
