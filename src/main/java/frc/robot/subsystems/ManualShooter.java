@@ -2,15 +2,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-
-
-
-
 import frc.robot.Constants;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -22,23 +21,27 @@ public class ManualShooter extends SubsystemBase{
 
  TalonFX shooterTalonFXTwo;
  TalonFX shooterTalonFXFour;
+
+ CANSparkBase motor;
+ SparkPIDController m_PIDController;
+ AbsoluteEncoder throughboreEncoder;
  //TODO: update the launch speed
 
  private PneumaticsSubsystem m_PneumaticsSubsystem;
  private Swerve m_Swerve;
- //private double tolerance = 0.1;
- //private boolean onTarget = false;
  public boolean shoot = false;
- //private double targetArea = 0.5;//calibrate this
 
 
  public ManualShooter(Swerve m_Swerve, PneumaticsSubsystem m_PneumaticsSubsystem) {
-  this.m_Swerve = m_Swerve;
+  //this.m_Swerve = m_Swerve;
   this.m_PneumaticsSubsystem = m_PneumaticsSubsystem;
+  //this.motor = motor;
+
+  //motor.burnFlash();
 
  //TODO: Update all of the Constant
  shooterCANSparkMax = new CANSparkMax(15, MotorType.kBrushless);
- shooterTalonFXTwo = new TalonFX(12);
+ shooterTalonFXTwo = new TalonFX(16);
  shooterCANSparkMaxThree = new CANSparkMax(13, MotorType.kBrushless);
  shooterTalonFXFour = new TalonFX(14);
 
@@ -52,26 +55,41 @@ public class ManualShooter extends SubsystemBase{
 
 
  shooterTalonFXTwo.setInverted(false);
- //TODO: This is replacing setSmartCurrentLimit so watch out for it
- shooterTalonFXTwo.setVoltage(40);
  shooterTalonFXTwo.setNeutralMode(NeutralModeValue.Brake);
- //shooterTalonFXTwo.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
  shooterTalonFXFour.setInverted(true);
- shooterTalonFXFour.setVoltage(40);
  shooterTalonFXFour.setNeutralMode(NeutralModeValue.Brake);
- //shooterTalonFXFour.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
 
  }
 
+ /*public void setPID(){
+  this.m_PIDController = motor.getPIDController();
+  //this.throughboreEncoder = motor.getAbsoluteEncoder();
+  this.m_PIDController.setP(.3); //calibrate this
+  this.m_PIDController.setD(.01);
+  this.m_PIDController.setI(0);
+  
+  //Change the min and max values
+  m_PIDController.setOutputRange(-.3, .3);
+  m_PIDController.setPositionPIDWrappingEnabled(true);
+  m_PIDController.setPositionPIDWrappingMinInput(0);
+
+  double conversion = 2 * Math.PI;
+  m_PIDController.setPositionPIDWrappingMaxInput(conversion);
+  throughboreEncoder.setPositionConversionFactor(conversion);
+  throughboreEncoder.setVelocityConversionFactor(conversion);
+
+  m_PIDController.setFeedbackDevice(throughboreEncoder);
+ }
+ */
 
  public void shooterAngleUp(double speed){
    //makes the motor move clockwise
-    shooterCANSparkMaxThree.setInverted(false);
+    shooterCANSparkMaxThree.setInverted(true);
    //TODO: check inverted
    shooterCANSparkMax.setInverted(true);
-   shooterCANSparkMaxThree.set(speed);
-   shooterCANSparkMax.set(speed);
+   shooterCANSparkMaxThree.set(speed/2);
+   shooterCANSparkMax.set(speed/2);
  }
 
 public void angleOff(){
@@ -86,8 +104,8 @@ public void shootOff() {
 
 //MODIFY IT TO WHERE IT WILL EXTEND TO INTAKE POSITION, SUCKS THE RING IN, AND THEN GO BACK TO NORMAL POSITION
 public void ringIntake(double speed) {
-
- shooterTalonFXFour.setInverted(true);
+ 
+ shooterTalonFXFour.setInverted(false);
  shooterTalonFXTwo.setInverted(false);
  shooterTalonFXTwo.set(speed / 2);
  shooterTalonFXFour.set(speed / 2);
@@ -96,19 +114,24 @@ public void ringIntake(double speed) {
 
 //TODO: Change
 public void shooterAngleDown(double speed){
-   shooterCANSparkMaxThree.setInverted(true);
+   shooterCANSparkMaxThree.setInverted(false);
    //TODO: check inverted
    shooterCANSparkMax.setInverted(false);
-   shooterCANSparkMaxThree.set(speed);
-   shooterCANSparkMax.set(speed);
+   shooterCANSparkMaxThree.set(speed/4);
+   shooterCANSparkMax.set(speed/4);
 }
 public void cherryBomb() {
-       //TODO: Add the launch speed
-       shooterTalonFXTwo.setInverted(true);
-       shooterTalonFXFour.setInverted(true);
-       shooterTalonFXTwo.set(Constants.Shooter.launchSpeed);
-       shooterTalonFXFour.set(Constants.Shooter.launchSpeed);
-     
+   shooterTalonFXTwo.setInverted(true);
+   shooterTalonFXFour.setInverted(true);
+   shooterTalonFXTwo.set(Constants.Shooter.launchSpeedLimit);
+   shooterTalonFXFour.set(Constants.Shooter.launchSpeedLimit);
+   //if(shooterTalonFXTwo.getVelocity().getValueAsDouble() >= 0.6 && shooterTalonFXFour.getVelocity().getValueAsDouble() >= 0.6){
+      m_PneumaticsSubsystem.toggle();
+      m_PneumaticsSubsystem.toggle();
+      // SmartDashboard.putNumber("shooterTalonFXTwo", shooterTalonFXTwo.getVelocity().getValueAsDouble());
+      // SmartDashboard.putNumber("shooterTalonFXFour", shooterTalonFXFour.getVelocity().getValueAsDouble());
+
+  // }
 }
 
 

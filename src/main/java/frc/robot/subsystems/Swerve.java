@@ -72,7 +72,7 @@ public class Swerve extends SubsystemBase {
   private final Field2d m_fieldSim = new Field2d();
   
   //TODO: This is where you decrease the Default Speed
-  public static final double output = .8;
+  public static final double output = .2;
 
   public static double m_output = output;
 
@@ -243,7 +243,7 @@ public class Swerve extends SubsystemBase {
     var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
         /*TODO: change the sign if the field relative robot is not driving forward */
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getYaw()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     //limits the wheel speeds

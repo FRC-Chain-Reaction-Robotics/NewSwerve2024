@@ -257,4 +257,8 @@ public class SwerveModule {
       double testOffset =  Constants.Swerve.kFrontLeftChassisAngularOffset;
       return testOffset;
   }
+
+  public void reverseDrive() {
+      m_drivingSparkMax.setInverted(!m_drivingSparkMax.getInverted());
+  }
 }

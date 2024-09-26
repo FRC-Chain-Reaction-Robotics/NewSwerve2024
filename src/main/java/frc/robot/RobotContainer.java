@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ShootMech;
 import frc.robot.commands.auto.DriveToDistance;
@@ -27,6 +28,8 @@ import frc.robot.subsystems.Winch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ManualShooter;
+import frc.robot.subsystems.HybridShooter;
+
 
 
 public class RobotContainer{
@@ -38,15 +41,14 @@ public class RobotContainer{
   public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
   private Swerve m_swerve = new Swerve();
   private Winch m_winch = new Winch();
-  private Shooter m_shooter = new Shooter(m_swerve, m_PneumaticsSubsystem);
-  
+  private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
+  //private HybridShooter m_hybridShooter = new HybridShooter(m_swerve, m_PneumaticsSubsystem);
   private Intake m_intake = new Intake();
- // private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
   public  final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
 
-
+ 
   
   public RobotContainer() {
     orientationChooser.setDefaultOption("Robot Oriented", () -> false);
@@ -67,9 +69,9 @@ public class RobotContainer{
     m_swerve.setDefaultCommand(
       new DriveWithJoysticks(
         m_swerve,
-        () -> modifyAxis(-m_driverController.getLeftY()),
-        () -> modifyAxis(m_driverController.getLeftX()),
-        () -> modifyAxis(-m_driverController.getRightX()),
+        () -> modifyAxis(m_driverController.getLeftY()),
+        () -> modifyAxis(-m_driverController.getLeftX()),
+        () -> modifyAxis(m_driverController.getRightX()),
         orientationChooser.getSelected()
       )
     );
@@ -100,8 +102,11 @@ public class RobotContainer{
     
    } */
    
-    
-    m_operatorController.y().whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake)).or(m_operatorController.b().whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
+    //Binds the y button to increasing intake speed and the b button to reversing the direction
+    m_operatorController.y()
+    .whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake))
+    .or(m_operatorController.b()
+    .whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
     .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
 
    // m_driverController.leftBumper().whileTrue(new RunCommand(() -> m_winch.leftOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.leftTrigger().whileTrue(new RunCommand(() -> m_winch.leftReverse(Constants.Winches.kWinchSpeed), m_winch)))
@@ -113,18 +118,30 @@ public class RobotContainer{
     
 
     //Shooter
-   // m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_manShooter.cherryBomb())).or(m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.launchSpeed))))
-   // .onFalse(new RunCommand(() -> m_manShooter.shootOff()));
-   
-   // m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
-    //.onFalse(new RunCommand(() -> m_manShooter.angleOff()));
+  /*   m_operatorController.rightTrigger()
+  .whileTrue(new RunCommand(() -> m_manShooter.cherryBomb())).or(m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.launchSpeed))))
+  .onFalse(new RunCommand(() -> m_manShooter.shootOff()));
+  m_operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.ringIntake(Constants.Shooter.intakeSpeedLimit), () -> m_manShooter.shootOff(), m_manShooter));
+  m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.cherryBomb(), () -> m_manShooter.shootOff(), m_manShooter));
+  */
+  //  m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
+  //   .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
 
-    
-    m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_shooter.groundIntake())).whileFalse(new RunCommand(() -> m_shooter.returnToUp()));
+    //hybrid shooter NEEDS FIXING
+    //m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_hybridShooter.groundIntake())).onFalse(new RunCommand(() -> m_hybridShooter.returnToUp()));
 
-    m_operatorController.rightTrigger().whileTrue(new RunCommand(() -> m_shooter.cherryBomb()));
+   /*m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_hybridShooter.groundIntake()));
+   m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_hybridShooter.shootOff()));
+   m_operatorController.leftTrigger().whileFalse(new RunCommand(() -> m_hybridShooter.returnToUp()));
+   m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_hybridShooter.cherryBomb(), () -> m_hybridShooter.shootOff(), m_hybridShooter));
+   */
 
+   m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeedUp))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeedDown))))
+   .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
 
+   m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.cherryBomb(), () -> m_manShooter.shootOff(), m_manShooter));
+   m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.intakeSpeedLimit)));
+   m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_manShooter.shootOff()));
     
     //slow mode for right bumper, medium slow for left bumper
 
@@ -140,8 +157,8 @@ public class RobotContainer{
     chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(15), m_swerve));
     chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
     chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
-    //chooser.addOption("Shoot and Move", new ShootAndMove(m_manShooter, m_swerve));
-    //chooser.addOption("Shoot", new ShootMech(m_manShooter));
+   // chooser.addOption("Shoot and Move", new ShootAndMove(m_hybridShooter, m_swerve));
+    //chooser.addOption("Shoot", new ShootMech(m_hybridShooter));
 
     SmartDashboard.putData(chooser);
   }
@@ -155,8 +172,9 @@ public class RobotContainer{
 
   public void setShooterCommand()
   {
-   // m_manShooter.setDefaultCommand(new ShootMech(m_manShooter));
+    //m_hybridShooter.setDefaultCommand(new ShootMech(m_hybridShooter));
   }
+  
   public void enabledInit()
   { }
 

@@ -4,7 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
@@ -32,14 +32,14 @@ public class Shooter extends SubsystemBase{
   private Apriltags m_Apriltags = new Apriltags();
   private PneumaticsSubsystem m_PneumaticsSubsystem;
   private PIDController m_XPidController = new PIDController(.6, 0, 0);
-  private PIDController m_YPidController = new PIDController(.6, 0, 0);
+  private PIDController m_YPidController = new PIDController(.2, 0, 0);
   private PIDController m_AreaPidController = new PIDController(.6, 0, 0);
   private Swerve m_Swerve;
-  private double[] yTarget = {0.2,0.5};//put in target shooter angles
+  private double[] yTarget = {0.23,0.04};//put in target shooter angles
   //private double tolerance = 0.3;
   public boolean shoot = false;
-  private boolean withinYToleranceGround = (Math.abs(throughBoreEncoder.getPosition()-yTarget[0])<Constants.Shooter.yTolerance);
-  private boolean withinYToleranceShooter = (Math.abs(throughBoreEncoder.getPosition()-yTarget[1])<Constants.Shooter.yTolerance);
+  private boolean withinYToleranceGround;
+  private boolean withinYToleranceShooter;
 
  
 
@@ -55,6 +55,10 @@ public class Shooter extends SubsystemBase{
      shooterTalonFXTwo = new TalonFX(12);
      shooterCANSparkMaxThree = new CANSparkMax(13, MotorType.kBrushless);
      shooterTalonFXFour = new TalonFX(14);
+     throughBoreEncoder = shooterCANSparkMaxThree.getAbsoluteEncoder(Type.kDutyCycle);
+
+     withinYToleranceGround = (Math.abs(throughBoreEncoder.getPosition()-yTarget[0])<Constants.Shooter.yTolerance);
+     withinYToleranceShooter = (Math.abs(throughBoreEncoder.getPosition()-yTarget[1])<Constants.Shooter.yTolerance);
 
      shooterCANSparkMax.setInverted(false);
      shooterCANSparkMax.setSmartCurrentLimit(40);
@@ -129,20 +133,21 @@ public class Shooter extends SubsystemBase{
          boolean withinAreaTolerance = (m_Apriltags.getArea()-Constants.Shooter.targetArea<Constants.Shooter.areaTolerance&&m_Apriltags.getArea()-Constants.Shooter.targetArea>Constants.Shooter.areaTolerance);
          shooterTalonFXTwo.set(Constants.Shooter.launchSpeedLimit);
          shooterTalonFXFour.set(Constants.Shooter.launchSpeedLimit);
-         while(shooterTalonFXTwo.getVelocity().getValueAsDouble()<0.6 && shooterTalonFXFour.getVelocity().getValueAsDouble() < 0.6||!Constants.Shooter.onTarget){
-              Constants.Shooter.onTarget = withinXTolerance&&withinYToleranceShooter&&withinAreaTolerance;
+         if(shooterTalonFXTwo.getVelocity().getValueAsDouble()<0.6 && shooterTalonFXFour.getVelocity().getValueAsDouble() < 0.6||!Constants.Shooter.onTarget){
+              Constants.Shooter.onTarget = withinXTolerance&&withinYToleranceShooter;//&&withinAreaTolerance
               if(!withinXTolerance){
                    m_Swerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*TODO:Might need to change */ ), false);
               }
               if(!withinYToleranceShooter){
-                   shooterTalonFXTwo.set(m_YPidController.calculate(throughBoreEncoder.getPosition(), yTarget[1]));
-                   shooterTalonFXFour.set(m_YPidController.calculate(throughBoreEncoder.getPosition(), yTarget[1]));
+                   shooterCANSparkMaxThree.set(m_YPidController.calculate(throughBoreEncoder.getPosition(), yTarget[1]));
               }
               if(!withinAreaTolerance){
                     m_Swerve.drive(m_AreaPidController.calculate(m_Apriltags.getArea(), /* TODO: Change the setpoint */ Constants.Shooter.targetArea), 0, 0, false);
                }
          }
+         else{
          m_PneumaticsSubsystem.toggle();
+         }
     }
   } 
  
