@@ -100,8 +100,8 @@ public class OldManualShooter extends SubsystemBase {
       // TODO: Add the launch speed
       shooterTalonFXTwo.setInverted(true);
       shooterTalonFXFour.setInverted(true);
-      shooterTalonFXTwo.set(Constants.Shooter.launchSpeed);
-      shooterTalonFXFour.set(Constants.Shooter.launchSpeed);
+      // shooterTalonFXTwo.set(Constants.Shooter.launchSpeed);
+      // shooterTalonFXFour.set(Constants.Shooter.launchSpeed);
 
    }
 

@@ -21,14 +21,8 @@ import frc.robot.commands.auto.ShootAndMove;
 import frc.robot.commands.auto.MoveandAmp;
 import frc.robot.commands.auto.TurnToAngle;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve; 
-import frc.robot.subsystems.Winch;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ManualShooter;
-import frc.robot.subsystems.HybridShooter;
+import frc.robot.subsystems.Swerve;
 
 
 
@@ -38,12 +32,8 @@ public class RobotContainer{
   private final SendableChooser<BooleanSupplier> orientationChooser = new SendableChooser<BooleanSupplier>();
 
    // Subsystem creation
-  public final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
   private Swerve m_swerve = new Swerve();
-  private Winch m_winch = new Winch();
-  private ManualShooter m_manShooter = new ManualShooter(m_swerve, m_PneumaticsSubsystem);
-  //private HybridShooter m_hybridShooter = new HybridShooter(m_swerve, m_PneumaticsSubsystem);
-  private Intake m_intake = new Intake();
+  
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
   public  final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
@@ -82,69 +72,7 @@ public class RobotContainer{
     m_driverController.y().onTrue(new InstantCommand(() -> m_swerve.zeroHeading(), m_swerve));
    // m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.resetEncoders(), m_swerve));
     m_driverController.a().onTrue(new InstantCommand(() -> m_swerve.setX(), m_swerve));
-
-    // Triggers solenoid on press of button b.
-    m_driverController.x().onTrue(new InstantCommand(() -> m_PneumaticsSubsystem.toggle()));
    
-
-    //m_operatorController.x().onTrue(new InstantCommand(() -> m_arm.getExtensionEncoder().setPosition(0), m_arm));
- 
-    //TODO: Fix Arm Angle Offsets in Arm.java first before uncommenting
-    // m_operatorController.a().onTrue(new MoveToGoal(m_arm, Row.BOTTOM))
-    // .or(m_operatorController.b().onTrue(new MoveToGoal(m_arm, Row.MIDDLE)))
-    // .or(m_operatorController.y().onTrue(new MoveToGoal(m_arm, Row.TOP)));
-   
-   
-   /* try{
-     m_winch.setDefaultCommand(new RunCommand(() -> m_winch.winchExtend(m_operatorController)));
-   }
-   catch(IllegalArgumentException e) {
-    
-   } */
-   
-    //Binds the y button to increasing intake speed and the b button to reversing the direction
-    m_operatorController.y()
-    .whileTrue(new RunCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed), m_intake))
-    .or(m_operatorController.b()
-    .whileTrue(new RunCommand(() -> m_intake.reverse(Constants.Intake.kIntakeSpeed), m_intake)))
-    .onFalse(new RunCommand(() -> m_intake.off(), m_intake));
-
-   // m_driverController.leftBumper().whileTrue(new RunCommand(() -> m_winch.leftOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.leftTrigger().whileTrue(new RunCommand(() -> m_winch.leftReverse(Constants.Winches.kWinchSpeed), m_winch)))
-   // .onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
-
-    //Winches
-     //m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_winch.rightOn(Constants.Winches.kWinchSpeed), m_winch)).or(m_driverController.rightTrigger().whileTrue(new RunCommand(() -> m_winch.rightReverse(Constants.Winches.kWinchSpeed), m_winch)))
-//.onFalse(new RunCommand(() -> m_winch.off(), m_winch)); 
-    
-
-    //Shooter
-  /*   m_operatorController.rightTrigger()
-  .whileTrue(new RunCommand(() -> m_manShooter.cherryBomb())).or(m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.launchSpeed))))
-  .onFalse(new RunCommand(() -> m_manShooter.shootOff()));
-  m_operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.ringIntake(Constants.Shooter.intakeSpeedLimit), () -> m_manShooter.shootOff(), m_manShooter));
-  m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.cherryBomb(), () -> m_manShooter.shootOff(), m_manShooter));
-  */
-  //  m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeed))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeed))))
-  //   .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
-
-    //hybrid shooter NEEDS FIXING
-    //m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_hybridShooter.groundIntake())).onFalse(new RunCommand(() -> m_hybridShooter.returnToUp()));
-
-   /*m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_hybridShooter.groundIntake()));
-   m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_hybridShooter.shootOff()));
-   m_operatorController.leftTrigger().whileFalse(new RunCommand(() -> m_hybridShooter.returnToUp()));
-   m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_hybridShooter.cherryBomb(), () -> m_hybridShooter.shootOff(), m_hybridShooter));
-   */
-
-   m_operatorController.rightBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleUp(Constants.Shooter.shooterAngleSpeedUp))).or(m_operatorController.leftBumper().whileTrue(new RunCommand(() -> m_manShooter.shooterAngleDown(Constants.Shooter.shooterAngleSpeedDown))))
-   .onFalse(new RunCommand(() -> m_manShooter.angleOff()));
-
-   m_operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> m_manShooter.cherryBomb(), () -> m_manShooter.shootOff(), m_manShooter));
-   m_operatorController.leftTrigger().whileTrue(new RunCommand(() -> m_manShooter.ringIntake(Constants.Shooter.intakeSpeedLimit)));
-   m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_manShooter.shootOff()));
-    
-    //slow mode for right bumper, medium slow for left bumper
-
     //Changed from slow to fast on the first one and changed from medium to fast on the second m_swerve
     m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
     .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
@@ -154,9 +82,9 @@ public class RobotContainer{
 
   private void addCommandDropdown()
   {
-    chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(15), m_swerve));
-    chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
-    chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
+    // chooser.setDefaultOption("Drive To Distance", new DriveToDistance(Units.feetToMeters(15), m_swerve));
+    // chooser.addOption("Turn To Angle", new TurnToAngle(90, m_swerve));
+    // chooser.addOption("Move and Amp", new MoveandAmp(m_intake, m_swerve)); 
    // chooser.addOption("Shoot and Move", new ShootAndMove(m_hybridShooter, m_swerve));
     //chooser.addOption("Shoot", new ShootMech(m_hybridShooter));
 
@@ -164,7 +92,8 @@ public class RobotContainer{
   }
 
   public Command getAutonomousCommand() {
-     return chooser.getSelected();
+    //  return chooser.getSelected();
+    return null;
   }
 
   public void disabledInit()
