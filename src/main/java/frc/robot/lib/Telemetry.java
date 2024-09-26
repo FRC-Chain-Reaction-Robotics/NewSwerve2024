@@ -14,7 +14,10 @@ import frc.robot.Robot;
 public final class Telemetry {
   private static boolean m_isAllTelemetryEnabled = false;
 
-  /** Initializes default telemetry settings and topics with custom periodic updates */
+  /**
+   * Initializes default telemetry settings and topics with custom periodic
+   * updates
+   */
   public static void start() {
     SmartDashboard.putBoolean("EnableAllTelemetry", m_isAllTelemetryEnabled);
 
@@ -23,7 +26,10 @@ public final class Telemetry {
     Robot.addCustomPeriodic(Telemetry::updateFPGATimestamp, 3);
   }
 
-  /** This periodic function supports enabling/disabling the full stream of telemetry pushed to LiveWindow. */
+  /**
+   * This periodic function supports enabling/disabling the full stream of
+   * telemetry pushed to LiveWindow.
+   */
   private static void updateTelemetrySetting() {
     boolean isAllTelemetryEnabled = SmartDashboard.getBoolean("EnableAllTelemetry", m_isAllTelemetryEnabled);
     if (m_isAllTelemetryEnabled != isAllTelemetryEnabled) {
@@ -36,12 +42,18 @@ public final class Telemetry {
     }
   }
 
-  /** This periodic function supports providing the current match time to the driver station dashboard app during competition mode. */
+  /**
+   * This periodic function supports providing the current match time to the
+   * driver station dashboard app during competition mode.
+   */
   private static void updateMatchTime() {
     SmartDashboard.putNumber("Timing/MatchTime", Math.floor(Timer.getMatchTime()));
   }
 
-  /** This periodic function supports adding FPGA timestamps to entries when using the NetworkTables v3 protocol. */
+  /**
+   * This periodic function supports adding FPGA timestamps to entries when using
+   * the NetworkTables v3 protocol.
+   */
   private static void updateFPGATimestamp() {
     SmartDashboard.putNumber("Timing/FPGATimestamp", Timer.getFPGATimestamp());
   }

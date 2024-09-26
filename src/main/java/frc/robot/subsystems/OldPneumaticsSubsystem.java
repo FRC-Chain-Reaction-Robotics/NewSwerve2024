@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import edu.wpi.first.hal.util.AllocationException;
 /* Github testing */
 //import edu.wpi.first.wpilibj.Compressor;
@@ -15,16 +16,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class PneumaticsSubsystem extends SubsystemBase {
+@Deprecated
+public class OldPneumaticsSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private DoubleSolenoid ds;
-  
-  public PneumaticsSubsystem() {
-    try{
-      ds = new DoubleSolenoid(42 ,PneumaticsModuleType.CTREPCM, 1, 2);
+
+  public OldPneumaticsSubsystem() {
+    try {
+      ds = new DoubleSolenoid(42, PneumaticsModuleType.CTREPCM, 1, 2);
       ds.set(DoubleSolenoid.Value.kForward);
-    }
-    catch(AllocationException e) {
+    } catch (AllocationException e) {
 
     }
   }
@@ -35,16 +36,17 @@ public class PneumaticsSubsystem extends SubsystemBase {
    * @return a command
    */
   // public Command exampleMethodCommand() {
-  //   // Inline construction of command goes here.
-  //   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  //   return runOnce(
-  //       () -> {
-  //         /* one-time action goes here */
-  //       });
+  // // Inline construction of command goes here.
+  // // Subsystem::RunOnce implicitly requires `this` subsystem.
+  // return runOnce(
+  // () -> {
+  // /* one-time action goes here */
+  // });
   // }
 
   /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+   * An example method querying a boolean state of the subsystem (for example, a
+   * digital sensor).
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
@@ -53,15 +55,13 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return false;
   }
 
-  public void toggle()
-  {
+  public void toggle() {
     ds.toggle();
   }
 
-  
   @Override
   public void periodic() {
-    //Do nothing
+    // Do nothing
   }
 
   @Override

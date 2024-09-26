@@ -9,27 +9,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /* Github testing */
-public class Intake extends SubsystemBase{
+@Deprecated
+public class OldIntake extends SubsystemBase {
 
     private CANSparkMax intakeCANSparkMax;
 
-    public Intake(){
+    public OldIntake() {
 
-        intakeCANSparkMax = new CANSparkMax(Constants.Intake.kIntakeMotorId, MotorType.kBrushless); 
+        intakeCANSparkMax = new CANSparkMax(Constants.Intake.kIntakeMotorId, MotorType.kBrushless);
         intakeCANSparkMax.setInverted(true);
         intakeCANSparkMax.setSmartCurrentLimit(60);
         intakeCANSparkMax.setIdleMode(IdleMode.kBrake);
     }
-    public void on(double speed){
+
+    public void on(double speed) {
         intakeCANSparkMax.setInverted(false);
         intakeCANSparkMax.set(speed);
     }
-    public void off(){
+
+    public void off() {
         intakeCANSparkMax.set(0);
     }
-    public void reverse(double speed){
+
+    public void reverse(double speed) {
         intakeCANSparkMax.setInverted(true);
         intakeCANSparkMax.set(speed / 2);
     }
-    
+
 }

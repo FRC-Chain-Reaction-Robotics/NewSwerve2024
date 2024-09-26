@@ -21,8 +21,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotInstance = this;
     DataLog.start();
-    Telemetry.start(); 
-    m_robotContainer = new RobotContainer();    
+    Telemetry.start();
+    m_robotContainer = new RobotContainer();
   }
 
   @Override
@@ -32,15 +32,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    //m_robotContainer.disabledInit();
+    // m_robotContainer.disabledInit();
     DataLog.mode("DISABLED");
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+  }
 
   @Override
   public void autonomousInit() {
@@ -53,10 +55,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
@@ -65,14 +69,15 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -80,15 +85,19 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 
-   /** This function provides static access to create a custom periodic function in the current robot instance. */
-   public static void addCustomPeriodic(Runnable callback, double periodSeconds) {
+  /**
+   * This function provides static access to create a custom periodic function in
+   * the current robot instance.
+   */
+  public static void addCustomPeriodic(Runnable callback, double periodSeconds) {
     m_robotInstance.addPeriodic(callback, periodSeconds, 0.02);
   }
-  
-  
+
 }

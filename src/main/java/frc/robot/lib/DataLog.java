@@ -25,12 +25,9 @@ public final class DataLog {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    CommandScheduler.getInstance().
-      onCommandInitialize(command -> init(command));
-    CommandScheduler.getInstance().
-      onCommandInterrupt(command -> end(command, true));
-    CommandScheduler.getInstance().
-      onCommandFinish(command -> end(command, false));
+    CommandScheduler.getInstance().onCommandInitialize(command -> init(command));
+    CommandScheduler.getInstance().onCommandInterrupt(command -> end(command, true));
+    CommandScheduler.getInstance().onCommandFinish(command -> end(command, false));
   }
 
   /**
@@ -39,7 +36,7 @@ public final class DataLog {
    * @param message contains the text of the message to be logged.
    */
   public static void log(String message) {
-    DataLogManager.log(String.format("[%6.2f] %s\n", Timer.getFPGATimestamp() , message));
+    DataLogManager.log(String.format("[%6.2f] %s\n", Timer.getFPGATimestamp(), message));
   }
 
   /**
@@ -72,7 +69,7 @@ public final class DataLog {
   /**
    * Logs the start of a command.
    *
-   * @param command is the command class that is starting.
+   * @param command  is the command class that is starting.
    *
    * @param settings are the parameters used when starting the command.
    */
@@ -85,12 +82,12 @@ public final class DataLog {
   /**
    * Logs the end of a command.
    *
-   * @param command is the command class that is ending.
+   * @param command       is the command class that is ending.
    *
    * @param isInterrupted is <b>true</b> if the command was interrupted.
    */
   public static void end(Command command, boolean isInterrupted) {
     String name = command.getClass().getSimpleName();
-    log("--> " + (isInterrupted ? "Interrupted": "End") + "command: " + name);
+    log("--> " + (isInterrupted ? "Interrupted" : "End") + "command: " + name);
   }
 }
