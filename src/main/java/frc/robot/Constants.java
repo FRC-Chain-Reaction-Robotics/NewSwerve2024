@@ -212,30 +212,23 @@ public class Constants {
 
 
       public static final class Intake {
+        //Intake IDs
+        public static final int INTAKE_ROLLERS = 9;
+        public static final int INTAKE_ROTATION = 10;
 
-        //TODO: Match the correct Motor ID and intakeSpeed
-        public static final int kIntakeMotorId = 9;
-
-        public static final double kIntakeSpeed = .35;
+        //temp value
+        public static final double INTAKE_SPEED = .10;
       }
 
       public static final class Shooter {
+        //Shooter IDs
+        public static final int TOP_ROLLER1_ID = 11;
+        public static final int TOP_ROLLER2_ID = 12;
+        public static final int BOTTOM_ROLLER1_ID = 13;
+        public static final int BOTTOM_ROLLER2_ID = 14;
 
-        public static final double intakeSpeedLimit = 0.35;
-        public static final double launchSpeedLimit = .9;
-
-
-        public static final double xTolerance = 0.1;
-        public static final double yTolerance = 0.1;
-        public static boolean onTarget = false;
-        public static boolean shoot = false;
-        public static double areaTolerance = .01;
-        public static double targetArea = 0.5;//calibrate this
-
-        public static double shooterAngleSpeedDown = .2;
-        public static double shooterAngleSpeedUp = .4;
-
-
+        //temp value
+        public static final double SHOOTING_SPEED = 0.20;
       }
 
 
@@ -317,5 +310,4 @@ public class Constants {
     //     public static final double kMinimumPressure = 20;
 
     //   }
-
 }
