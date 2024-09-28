@@ -16,6 +16,7 @@ import com.revrobotics.AbsoluteEncoder;
 /* Github testing */
 @Deprecated
 public class OldShooter extends SubsystemBase {
+     /*
      CANSparkMax shooterCANSparkMax;
      CANSparkMax shooterCANSparkMaxThree;
 
@@ -128,7 +129,7 @@ public class OldShooter extends SubsystemBase {
                          m_Swerve.drive(0, 0, m_XPidController.calculate(m_Apriltags.getX(), 0/*
                                                                                                * TODO:Might need to
                                                                                                * change
-                                                                                               */ ), false);
+                                                                                                ), false);
                     }
                     if (!withinYToleranceShooter) {
                          shooterTalonFXTwo
@@ -139,7 +140,7 @@ public class OldShooter extends SubsystemBase {
                     if (!withinAreaTolerance) {
                          m_Swerve.drive(
                                    m_AreaPidController.calculate(m_Apriltags.getArea(),
-                                             /* TODO: Change the setpoint */ Constants.Shooter.targetArea),
+                                             /* TODO: Change the setpoint  Constants.Shooter.targetArea),
                                    0, 0, false);
                     }
                }

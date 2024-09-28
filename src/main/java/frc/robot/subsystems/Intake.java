@@ -44,6 +44,4 @@ public class Intake extends SubsystemBase{
         intakeRotation.setInverted(false);
         intakeRotation.set(speed);
     }
-
-
 }

@@ -48,6 +48,5 @@ public class Shooter extends SubsystemBase{
         topRoller1.set(speed);
         topRoller2.set(speed);
     }
-    
 
 }

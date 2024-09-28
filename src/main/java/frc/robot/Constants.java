@@ -216,8 +216,10 @@ public class Constants {
         public static final int INTAKE_ROLLERS = 9;
         public static final int INTAKE_ROTATION = 10;
 
-        //temp value
+        //temp values
         public static final double INTAKE_SPEED = .10;
+        public static final double ROTATION_SPEED = .10;
+
       }
 
       public static final class Shooter {
@@ -229,6 +231,7 @@ public class Constants {
 
         //temp value
         public static final double SHOOTING_SPEED = 0.20;
+
       }
 
 

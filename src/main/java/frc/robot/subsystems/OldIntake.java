@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /* Github testing */
 @Deprecated
 public class OldIntake extends SubsystemBase {
-
+/* 
     private CANSparkMax intakeCANSparkMax;
 
     public OldIntake() {
@@ -35,5 +35,5 @@ public class OldIntake extends SubsystemBase {
         intakeCANSparkMax.setInverted(true);
         intakeCANSparkMax.set(speed / 2);
     }
-
+*/
 }
