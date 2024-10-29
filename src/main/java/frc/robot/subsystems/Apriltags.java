@@ -42,7 +42,7 @@ public class Apriltags extends SubsystemBase {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
     }
-
+    
     public double getV() {
         return v;
     }

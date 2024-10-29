@@ -109,7 +109,7 @@ public class Constants {
         public static final double kMaxAngularSpeed = kMaxSpeedMetersPerSecond/Math.hypot(kTrackWidth/2.0, kWheelBase/2.0); // radians per second
         
         //TODO: Change the slew rate limiter value here
-        public static final double kMaxAccel = kMaxSpeedMetersPerSecond * 2;
+        public static final double kMaxAccel = kMaxSpeedMetersPerSecond * 3;
 
         public static final double kMaxAngularAccel = kMaxAccel/Math.hypot(kTrackWidth/2.0, kWheelBase/2.0);
         // Chassis configuration
@@ -128,25 +128,25 @@ public class Constants {
         //TODO: Front Left Module
         public static final int kFrontLeftDrivingCanId = 1;
         public static final int kFrontLeftTurningCanId = 2;
-        public static final int kFrontLeftCanCoderId = 61;
+        public static final int kFrontLeftCanCoderId = 62;
         public static final double kFrontLeftChassisAngularOffset = 0;   //   epic
         
         //Front Right Module
         public static final int kFrontRightDrivingCanId = 3; 
         public static final int kFrontRightTurningCanId = 4;
-        public static final int kFrontRightCanCoderId = 62;
+        public static final int kFrontRightCanCoderId = 59;
         public static final double kFrontRightChassisAngularOffset = 0;
         
          //Back Left Module
         public static final int kBackLeftDrivingCanId = 7;
         public static final int kBackLeftTurningCanId = 8;
-        public static final int kBackLeftCanCoderId = 60;
+        public static final int kBackLeftCanCoderId = 61;
         public static final double kBackLeftChassisAngularOffset = 0;
         
         //Back Right Module
         public static final int kBackRightDrivingCanId = 5;
         public static final int kBackRightTurningCanId = 6;
-        public static final int kBackRightCanCoderId = 59;
+        public static final int kBackRightCanCoderId = 60;
         public static final double kBackRightChassisAngularOffset = 0;
 
         public static final boolean kGyroReversed = false;
@@ -218,8 +218,10 @@ public class Constants {
 
         //temp values
         public static final double INTAKE_SPEED = .10;
-        public static final double ROTATION_SPEED = .10;
-
+        public static final double ROTATION_SPEED = .30;
+        public static final double BOUND_OFFSET = 0.45;
+        public static final double TIME_TO_SWAP = 1.0;
+        public static final int ROTATION_CURR_LIMIT = 20;
       }
 
       public static final class Shooter {
@@ -230,8 +232,8 @@ public class Constants {
         public static final int BOTTOM_ROLLER2_ID = 14;
 
         //temp value
-        public static final double SHOOTING_SPEED = 0.20;
-
+        public static final double SHOOTING_SPEED = 0.50;
+        public static final double ACCEPT_SPEED = 0.20;
       }
 
 

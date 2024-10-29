@@ -1,56 +1,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ManualShooter;
+import frc.robot.Constants;
+//import frc.robot.subsystems.ManualShooter;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.HybridShooter;
-public class ShootMech extends Command{
 
-    HybridShooter m_manShooter;
+//import frc.robot.subsystems.HybridShooter;
+public class ShootMech extends Command {
+    Shooter m_manShooter;
 
-
-    public ShootMech(HybridShooter m_shooter) {
+    public ShootMech(Shooter m_shooter) {
         this.m_manShooter = m_shooter;
         addRequirements(m_shooter);
     }
 
     @Override
     public void initialize() {
-        m_manShooter.cherryBomb();
+        // TODO: Point shooter forwards/in proper direction
     }
+    
 
     @Override
-    public void end(boolean wasInturrupted){
-        m_manShooter.shootOff();
+    public void end(boolean wasInturrupted) {
+        m_manShooter.shoot(0);
     }
-
-
-    /* 
-    Shooter m_shooter;
-    HybridShooter m_hybridShooter;
-    ManualShooter m_manShooter;
-
-   /* public ShootMech(HybridShooter m_shooter) {
-        this.m_hybridShooter = m_shooter;
-        addRequirements(m_shooter);
-    }
-
-     /*public ShootMech(ManualShooter m_shooter) {
-        this.m_manShooter = m_shooter;
-        addRequirements(m_shooter);
-    }*/
-
-   // public void limeExecute() {
-    //    m_shooter.cherryBomb();
-   // }
-/* 
+    
+    @Override
     public void execute() {
-        m_hybridShooter.cherryBomb();
+        m_manShooter.shoot(Constants.Shooter.SHOOTING_SPEED);
     }
 
     public boolean interrupted() {
-        return /*m_shooter.shoot || m_shooter.shoot;
+        return false;
     }
 
-    */
-} 
+}

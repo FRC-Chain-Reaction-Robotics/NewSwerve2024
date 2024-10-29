@@ -7,12 +7,12 @@ import frc.robot.subsystems.OldIntake;
 import frc.robot.subsystems.Swerve;
 
 public class OtherMoveAndAmp extends SequentialCommandGroup {
-
+/* 
     public OtherMoveAndAmp(OldIntake m_intake, Swerve m_Swerve) {
         // TODO: Test TurnToAngle
         addCommands(new DriveToDistance(3, m_Swerve), new TurnToAngle(90, m_Swerve),
                 new InstantCommand(() -> m_intake.on(Constants.Intake.kIntakeSpeed)));
 
     }
-
+*/
 }

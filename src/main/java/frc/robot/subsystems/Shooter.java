@@ -37,16 +37,17 @@ public class Shooter extends SubsystemBase{
         bottomRoller2.setSmartCurrentLimit(20);
         bottomRoller2.setIdleMode(IdleMode.kBrake);
         
-        bottomRoller1.follow(topRoller1);
-        bottomRoller2.follow(topRoller2);
+        bottomRoller2.follow(bottomRoller1);
+        topRoller2.follow(topRoller1);
     }
 
     public void shoot (double speed) {
-        topRoller1.setInverted(false);
-        topRoller2.setInverted(true);
-
         topRoller1.set(speed);
-        topRoller2.set(speed);
+        bottomRoller1.set(speed);
+    }
+
+    public void acceptRing() {
+        bottomRoller1.set(Constants.Shooter.ACCEPT_SPEED);
     }
 
 }

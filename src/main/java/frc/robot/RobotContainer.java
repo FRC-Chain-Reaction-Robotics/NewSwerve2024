@@ -21,9 +21,11 @@ import frc.robot.commands.auto.ShootAndMove;
 import frc.robot.commands.auto.MoveandAmp;
 import frc.robot.commands.auto.TurnToAngle;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.lib.Telemetry;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 
 public class RobotContainer{
@@ -33,7 +35,8 @@ public class RobotContainer{
 
    // Subsystem creation
   private Swerve m_swerve = new Swerve();
-  
+  private Intake m_intake = new Intake();
+  private Shooter m_shooter = new Shooter();
 
   private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
   public  final CommandXboxController m_operatorController = new CommandXboxController(Constants.Controllers.kOperatorControllerPort);
@@ -49,7 +52,7 @@ public class RobotContainer{
     configureButtonBindings();
     //Creating a dropdown for autonomous commands to choose from
     addCommandDropdown();
-   // m_shooter.setDefaultCommand(new ShootMech(m_manShooter));
+    //m_shooter.setDefaultCommand(new ShootMech(m_manShooter));
     
   }
 
@@ -77,7 +80,27 @@ public class RobotContainer{
     m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_swerve.slowMode(), m_swerve))
     .or(m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_swerve.fastMode(), m_swerve)))
     .onFalse(new InstantCommand(() -> m_swerve.mediumMode(), m_swerve));
+
+    //OPERATOR
+    //Intake Rotation
+    m_operatorController.rightBumper().onTrue(new InstantCommand(() -> m_intake.togglePosition()));
+
+    //Right Trigger grabs the ring, Left Trigger spits it out
+    m_operatorController.rightTrigger().whileTrue(new InstantCommand(() -> 
+      m_intake.grab(Constants.Intake.INTAKE_SPEED)));
+    m_operatorController.leftTrigger().whileTrue(new InstantCommand(() -> 
+      m_intake.spitOut(Constants.Intake.INTAKE_SPEED)));
     
+    m_operatorController.leftTrigger().and(m_operatorController.rightTrigger())
+    .onFalse(new InstantCommand(() -> m_intake.grab(0.0)));
+
+    //shoots the ring
+    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.shoot(Constants.Shooter.SHOOTING_SPEED)));
+
+    //Intake sends the ring to the Shooter and Shooter grabs it
+    m_operatorController.b().onTrue(new InstantCommand(() -> {
+      m_intake.moveToShooter();
+    }));
   }
 
   private void addCommandDropdown()

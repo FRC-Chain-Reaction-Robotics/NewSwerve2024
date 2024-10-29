@@ -163,7 +163,6 @@ public class SwerveModule {
     m_drivingEncoder.setPosition(0);
     m_turningEncoder
         .setPosition(Rotation2d.fromRotations(-m_canCoder.getAbsolutePosition().getValueAsDouble()).getRadians());
-
   }
 
   /**
